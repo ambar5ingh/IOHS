@@ -474,12 +474,12 @@ with st.sidebar:
     min_date  = today - timedelta(days=365)
 
     date_range = st.date_input(
-        "Date range",
+        "From → To",
         value=(today - timedelta(days=1), today),
         min_value=min_date,
         max_value=today,
-        key="date_range",
-        label_visibility="collapsed",
+        key="dr",
+        label_visibility="hidden",
     )
     if isinstance(date_range, (list, tuple)) and len(date_range) == 2:
         date_from, date_to = date_range[0], date_range[1]
