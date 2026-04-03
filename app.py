@@ -1,6 +1,6 @@
 """
 Indoor Occupational Heat Stress Dashboard
-Prayagraj Dyeing and Printing Private Limited — Surat
+Unit 1 — Surat
 WRI India
 """
 
@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 import time
 
 st.set_page_config(
-    page_title="Heat Stress Monitor | Prayagraj Dyeing and Printing Pvt. Ltd.",
+    page_title="Heat Stress Monitor | Unit 1",
     page_icon="🌡️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -456,7 +456,7 @@ with st.sidebar:
     st.markdown("""
     <div style='padding:16px 0 8px 0'>
       <div class='main-title'>Indoor Occupational Heat Stress</div>
-      <div class='main-subtitle'>Prayagraj Dyeing &amp; Printing Pvt. Ltd.<br>Surat · WRI India</div>
+      <div class='main-subtitle'>Prayagraj Dyeing &amp; Unit 1<br>Surat · WRI India</div>
     </div>
     """, unsafe_allow_html=True)
     st.markdown("---")
@@ -597,7 +597,7 @@ st.markdown("""
     Prayagraj Dyeing &amp; Printing Pvt. Ltd. — Live Sensor Dashboard
   </h1>
   <p style='margin:6px 0 0 0; color:#000000; font-size:13px; font-weight:500; font-family:Calibri,Segoe UI,Arial,sans-serif;'>
-    Surat · 15 Sensor Nodes · Heat Index Analysis
+    Surat · Heat Index Analysis
   </p>
 </div>
 """, unsafe_allow_html=True)
