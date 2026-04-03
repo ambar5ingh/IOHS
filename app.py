@@ -1,7 +1,7 @@
 """
 Indoor Occupational Heat Stress Dashboard
 Prayagraj Dyeing and Printing Private Limited — Surat Textile MSME Study
-WRI Research Project
+WRI INDIA
 """
 
 import streamlit as st
@@ -298,8 +298,8 @@ def load_sample_data() -> dict[str, pd.DataFrame]:
 with st.sidebar:
     st.markdown("""
     <div style='padding:16px 0 8px 0'>
-      <div class='main-title'>🌡️ HeatWatch</div>
-      <div class='main-subtitle'>Prayagraj Dyeing & Printing<br>Surat Textile MSME · WRI Study</div>
+      <div class='main-title'> Indoor Occupational Heat Stress</div>
+      <div class='main-subtitle'>Prayagraj Dyeing & Printing Private Limited<br>Surat · WRI India</div>
     </div>
     """, unsafe_allow_html=True)
     st.markdown("---")
