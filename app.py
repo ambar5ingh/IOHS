@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 import time
 
 st.set_page_config(
-    page_title="Heat Stress Monitor | Prayagraj Dyeing and Printing Pvt. Ltd.",
+    page_title="Heat Stress Monitor",
     page_icon="🌡️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -162,18 +162,110 @@ header {visibility: hidden;}
     margin-top: 2px;
 }
 
-/* Tab styling */
+/* ── Tab styling ── */
 .stTabs [data-baseweb="tab"] {
     font-family: var(--font) !important;
     font-weight: 600;
     color: #000000 !important;
 }
 
-/* Selectbox, buttons */
-.stSelectbox label, .stCheckbox label, .stToggle label {
+/* ── Fix dark code blocks ── */
+code, pre, [data-testid="stCode"], .stCode,
+div[class*="stCodeBlock"], .stMarkdown code, .stMarkdown pre {
+    background-color: #dbeafe !important;
+    color: #000000 !important;
+    border: 1px solid #93c5fd !important;
+    font-family: Calibri, Segoe UI, Arial, sans-serif !important;
+    border-radius: 6px !important;
+}
+
+/* ── Fix dark dropdowns / selectboxes ── */
+/* Outer container */
+[data-baseweb="select"] {
+    background-color: #ffffff !important;
+}
+/* The visible input box */
+[data-baseweb="select"] > div,
+[data-baseweb="select"] > div > div {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-family: var(--font) !important;
+    border-color: #93c5fd !important;
+}
+/* The selected value text */
+[data-baseweb="select"] span,
+[data-baseweb="select"] div[class*="ValueContainer"] span,
+[data-baseweb="select"] div[class*="singleValue"] {
+    color: #000000 !important;
+    font-family: var(--font) !important;
+}
+/* Dropdown arrow icon */
+[data-baseweb="select"] svg { color: #000000 !important; }
+
+/* Dropdown open popover/listbox */
+[data-baseweb="popover"],
+[data-baseweb="menu"],
+ul[data-baseweb="menu"],
+[role="listbox"],
+[data-baseweb="list"] {
+    background-color: #ffffff !important;
+    border: 1px solid #93c5fd !important;
+}
+/* Individual options */
+[role="option"],
+[data-baseweb="option"],
+li[role="option"] {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-family: var(--font) !important;
+}
+[role="option"]:hover,
+[data-baseweb="option"]:hover {
+    background-color: #dbeafe !important;
+    color: #000000 !important;
+}
+
+/* ── Stremlit native widget labels ── */
+.stSelectbox label,
+.stMultiSelect label,
+.stCheckbox label,
+.stToggle label,
+.stRadio label,
+[data-testid="stWidgetLabel"] {
     font-family: var(--font) !important;
     color: #000000 !important;
     font-weight: 600;
+}
+
+/* ── Plotly chart y-axis labels & all SVG text ── */
+.js-plotly-plot .plotly text,
+.js-plotly-plot .plotly .ytick text,
+.js-plotly-plot .plotly .xtick text,
+.js-plotly-plot .plotly .g-gtitle text,
+.js-plotly-plot .plotly .annotation text {
+    fill: #000000 !important;
+    font-family: var(--font) !important;
+}
+
+/* ── Metric delta & number widgets ── */
+[data-testid="stMetricValue"],
+[data-testid="stMetricLabel"],
+[data-testid="stMetricDelta"] {
+    color: #000000 !important;
+    font-family: var(--font) !important;
+}
+
+/* ── Download button ── */
+.stDownloadButton button {
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+    font-family: var(--font) !important;
+    font-weight: 600;
+    border-radius: 6px;
+    border: none;
+}
+.stDownloadButton button:hover {
+    background-color: #1d4ed8 !important;
 }
 
 .js-plotly-plot { border-radius: 8px; }
@@ -309,7 +401,8 @@ with st.sidebar:
         index=1,
     )
     hours_map = {"Last 6 hours": 6, "Last 24 hours": 24,
-                 "Last 48 hours": 48, "Last 7 days": 168}
+                 "Last 48 hours": 48, "Last 7 days": 168,
+                "Last 30 days": 720}
     selected_hours = hours_map[time_range]
 
     st.markdown("#### Devices")
@@ -376,7 +469,7 @@ st.markdown("""
     Prayagraj Dyeing &amp; Printing Pvt. Ltd. — Live Sensor Dashboard
   </h1>
   <p style='margin:6px 0 0 0; color:#000000; font-size:13px; font-weight:500; font-family:Calibri,Segoe UI,Arial,sans-serif;'>
-    Surat · 15 Sensor Nodes · Heat Index Analysis
+    Surat · Heat Index Analysis
   </p>
 </div>
 """, unsafe_allow_html=True)
@@ -556,11 +649,18 @@ with tab_heatmap:
 
         fig.update_layout(
             **PLOTLY_LAYOUT,
-            xaxis=dict(title="Heat Index (°F)", gridcolor="#bfdbfe", color="#000000",
-                       range=[min(hi_vals)-5, max(hi_vals)+30]),
-            yaxis=dict(gridcolor="#bfdbfe", color="#000000"),
-            margin=dict(l=0, r=80, t=20, b=40),
-            height=500,
+            xaxis=dict(
+                title="Heat Index (°F)", gridcolor="#bfdbfe", color="#000000",
+                tickfont=dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif", size=12),
+                titlefont=dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif"),
+                range=[min(hi_vals)-5, max(hi_vals)+30],
+            ),
+            yaxis=dict(
+                gridcolor="#bfdbfe", color="#000000", automargin=True,
+                tickfont=dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif", size=12),
+            ),
+            margin=dict(l=220, r=80, t=20, b=40),
+            height=520,
         )
         st.plotly_chart(fig, use_container_width=True)
 
@@ -585,10 +685,12 @@ with tab_heatmap:
             color_continuous_scale=["#16a34a","#ca8a04","#ea580c","#dc2626"],
             labels={"Temperature":"Temp (°C)","Humidity":"RH (%)","HI_F":"HI (°F)"},
         )
+        _tf = dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif", size=12)
         fig2.update_layout(
             **PLOTLY_LAYOUT,
-            xaxis=dict(gridcolor="#bfdbfe", color="#000000"),
-            yaxis=dict(gridcolor="#bfdbfe", color="#000000"),
+            xaxis=dict(gridcolor="#bfdbfe", color="#000000", tickfont=_tf),
+            yaxis=dict(gridcolor="#bfdbfe", color="#000000", tickfont=_tf),
+            coloraxis_colorbar=dict(tickfont=_tf, title=dict(font=_tf)),
             margin=dict(l=0, r=0, t=20, b=40),
             height=400,
         )
@@ -628,17 +730,19 @@ with tab_trends:
             fig3.add_hline(y=y, line_dash="dot", line_color=color,
                            line_width=1, row=3, col=1)
 
-        axis_style = dict(gridcolor="#bfdbfe", color="#000000", linecolor="#000000")
+        _tf = dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif", size=12)
+        axis_style = dict(gridcolor="#bfdbfe", color="#000000", linecolor="#000000", tickfont=_tf)
         fig3.update_layout(
             **PLOTLY_LAYOUT,
             xaxis3=axis_style, yaxis=axis_style, yaxis2=axis_style, yaxis3=axis_style,
-            legend=dict(bgcolor="#f8f9fa", bordercolor="#dee2e6", font=dict(color="#000000")),
-            margin=dict(l=0, r=0, t=40, b=40),
+            legend=dict(bgcolor="#eff6ff", bordercolor="#93c5fd", font=dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif")),
+            margin=dict(l=60, r=0, t=40, b=40),
             height=600, showlegend=False,
         )
         # Subplot title colour
         for ann in fig3.layout.annotations:
             ann.font.color = "#000000"
+            ann.font.family = "Calibri, Segoe UI, Arial, sans-serif"
         st.plotly_chart(fig3, use_container_width=True)
 
         c1, c2, c3, c4, c5 = st.columns(5)
@@ -662,13 +766,15 @@ with tab_trends:
             mode="lines", name=info["name"],
             line=dict(color=palette[i % len(palette)], width=1.5),
         ))
+    _tf = dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif", size=12)
     fig4.update_layout(
         **PLOTLY_LAYOUT,
-        xaxis=dict(gridcolor="#bfdbfe", color="#000000"),
-        yaxis=dict(gridcolor="#bfdbfe", color="#000000", title="Heat Index (°F)"),
-        legend=dict(bgcolor="#f8f9fa", bordercolor="#dee2e6",
-                    font=dict(color="#000000", size=10)),
-        margin=dict(l=0, r=0, t=20, b=40),
+        xaxis=dict(gridcolor="#bfdbfe", color="#000000", tickfont=_tf),
+        yaxis=dict(gridcolor="#bfdbfe", color="#000000", title="Heat Index (°F)",
+                   tickfont=_tf, titlefont=dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif")),
+        legend=dict(bgcolor="#eff6ff", bordercolor="#93c5fd",
+                    font=dict(color="#000000", size=11, family="Calibri, Segoe UI, Arial, sans-serif")),
+        margin=dict(l=60, r=0, t=20, b=40),
         height=400,
     )
     st.plotly_chart(fig4, use_container_width=True)
@@ -845,14 +951,23 @@ This real-time dashboard displays environmental sensor data from **Prayagraj Dye
 Sensors are deployed at 15 locations across the facility — from stenter machines and jet dyeing areas to circulation zones and folding tables — capturing spatial and temporal variation in indoor heat conditions.
 
 **Heat Index** is computed using the **NWS Rothfusz regression** formula, applied after converting sensor temperatures from °C to °F:
-```
-HI = -42.379 + 2.049T + 10.143RH − 0.225T·RH − 6.838×10⁻³T²
-     − 5.482×10⁻²RH² + 1.229×10⁻³T²·RH + 8.528×10⁻⁴T·RH²
-     − 1.99×10⁻⁶T²·RH²
-```
-where T = temperature in °F, RH = relative humidity in %.
 
----
+        """)
+        st.markdown("""
+<div style='background:#dbeafe; border:1px solid #93c5fd; border-radius:8px;
+            padding:16px 20px; margin:8px 0 12px 0;
+            font-family:Calibri,Segoe UI,Arial,sans-serif; font-size:14px;
+            color:#000000; font-weight:500; line-height:1.8;'>
+  HI = −42.379 + 2.049T + 10.143RH − 0.225T·RH − 6.838×10⁻³T²<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;− 5.482×10⁻²RH² + 1.229×10⁻³T²·RH + 8.528×10⁻⁴T·RH²<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;− 1.99×10⁻⁶T²·RH²
+</div>
+<p style='font-family:Calibri,Segoe UI,Arial,sans-serif; font-size:13px;
+          color:#000000; margin:4px 0 12px 0;'>
+  where T = temperature in °F, RH = relative humidity in %.
+</p>
+        """, unsafe_allow_html=True)
+        st.markdown("""
 
 ### Study Unit Typologies
 
