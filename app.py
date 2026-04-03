@@ -209,6 +209,10 @@ div[class*="stCodeBlock"] {
     font-family: var(--font) !important;
     font-weight: 600 !important;
     color: #000000 !important;
+    font-size: 12px !important;
+    padding: 8px 10px !important;
+    min-width: 0 !important;
+    white-space: nowrap !important;
 }
 
 /* ── Plotly SVG text ── */
@@ -469,12 +473,18 @@ with st.sidebar:
     today     = datetime.utcnow().date()
     min_date  = today - timedelta(days=365)
 
-    date_from = st.date_input("From", value=today - timedelta(days=1),
-                               min_value=min_date, max_value=today, key="date_from",
-                               label_visibility="collapsed")
-    date_to   = st.date_input("To",   value=today,
-                               min_value=min_date, max_value=today, key="date_to",
-                               label_visibility="collapsed")
+    date_range = st.date_input(
+        "Date range",
+        value=(today - timedelta(days=1), today),
+        min_value=min_date,
+        max_value=today,
+        key="date_range",
+        label_visibility="collapsed",
+    )
+    if isinstance(date_range, (list, tuple)) and len(date_range) == 2:
+        date_from, date_to = date_range[0], date_range[1]
+    else:
+        date_from = date_to = date_range
 
     if st.button("Apply date range", use_container_width=True, key="apply_dates"):
         if date_from <= date_to:
