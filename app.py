@@ -23,13 +23,13 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Calibri:wght@400;600;700&display=swap');
 
 :root {
-    --bg: #ffffff;
-    --surface: #f8f9fa;
-    --surface2: #f1f3f5;
-    --border: #dee2e6;
+    --bg: #dbeafe;
+    --surface: #bfdbfe;
+    --surface2: #eff6ff;
+    --border: #93c5fd;
     --text: #000000;
     --muted: #000000;
     --accent: #e85d04;
@@ -38,12 +38,11 @@ st.markdown("""
     --warn: #b45309;
     --danger: #c2410c;
     --extreme: #b91c1c;
-    --mono: 'IBM Plex Mono', monospace;
-    --sans: 'IBM Plex Sans', sans-serif;
+    --font: 'Calibri', 'Segoe UI', Arial, sans-serif;
 }
 
 html, body, [class*="css"] {
-    font-family: var(--sans);
+    font-family: var(--font) !important;
     background-color: var(--bg) !important;
     color: #000000 !important;
 }
@@ -59,38 +58,42 @@ html, body, [class*="css"] {
 p, span, div, li, label, h1, h2, h3, h4, h5, h6,
 .stMarkdown, .stText, [class*="css"] {
     color: #000000 !important;
+    font-family: var(--font) !important;
 }
 
 .metric-card {
     background: var(--surface2);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 16px 20px;
+    border-radius: 10px;
+    padding: 18px 22px;
     margin-bottom: 12px;
     color: #000000 !important;
+    box-shadow: 0 2px 6px rgba(59,130,246,0.10);
 }
 .metric-card .label {
-    font-family: var(--mono);
-    font-size: 10px;
+    font-family: var(--font) !important;
+    font-size: 11px;
     color: #000000 !important;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     margin-bottom: 4px;
+    font-weight: 600;
 }
 .metric-card .value {
-    font-family: var(--mono);
-    font-size: 28px;
+    font-family: var(--font) !important;
+    font-size: 30px;
     font-weight: 700;
-    line-height: 1;
+    line-height: 1.1;
     color: #000000 !important;
 }
 .metric-card .sub {
-    font-size: 11px;
+    font-size: 12px;
     color: #000000 !important;
     margin-top: 4px;
+    font-family: var(--font) !important;
 }
 
-/* Value colour overrides — dark enough to read on white */
+/* Value colour overrides */
 .v-safe    { color: #15803d !important; }
 .v-caution { color: #92400e !important; }
 .v-danger  { color: #c2410c !important; }
@@ -100,7 +103,7 @@ p, span, div, li, label, h1, h2, h3, h4, h5, h6,
     display: inline-block;
     padding: 3px 10px;
     border-radius: 4px;
-    font-family: var(--mono);
+    font-family: var(--font) !important;
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 1px;
@@ -112,15 +115,15 @@ p, span, div, li, label, h1, h2, h3, h4, h5, h6,
 .badge-extreme { background: #fee2e2; color: #7f1d1d !important; border: 1px solid #fca5a5; }
 
 .section-header {
-    font-family: var(--mono);
-    font-size: 11px;
+    font-family: var(--font) !important;
+    font-size: 12px;
     color: #000000 !important;
     text-transform: uppercase;
     letter-spacing: 2px;
     padding: 0 0 8px 0;
     border-bottom: 2px solid var(--border);
     margin-bottom: 16px;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 hr { border-color: var(--border) !important; }
@@ -131,7 +134,7 @@ header {visibility: hidden;}
 
 .stDataFrame { border: 1px solid var(--border); border-radius: 8px; }
 
-/* Alert box — solid dark text, tinted background */
+/* Alert box */
 .alert-box {
     border-left: 4px solid #c2410c;
     background: #fff7ed;
@@ -141,22 +144,36 @@ header {visibility: hidden;}
     margin: 8px 0;
     font-size: 14px;
     font-weight: 500;
+    font-family: var(--font) !important;
 }
-.alert-box * { color: #000000 !important; }
+.alert-box * { color: #000000 !important; font-family: var(--font) !important; }
 .alert-box strong { color: #000000 !important; font-weight: 700; }
 
 .main-title {
-    font-family: var(--mono);
-    font-size: 20px;
+    font-family: var(--font) !important;
+    font-size: 22px;
     font-weight: 700;
     color: #000000 !important;
-    letter-spacing: -0.5px;
 }
 .main-subtitle {
-    font-family: var(--sans);
-    font-size: 12px;
+    font-family: var(--font) !important;
+    font-size: 13px;
     color: #000000 !important;
     margin-top: 2px;
+}
+
+/* Tab styling */
+.stTabs [data-baseweb="tab"] {
+    font-family: var(--font) !important;
+    font-weight: 600;
+    color: #000000 !important;
+}
+
+/* Selectbox, buttons */
+.stSelectbox label, .stCheckbox label, .stToggle label {
+    font-family: var(--font) !important;
+    color: #000000 !important;
+    font-weight: 600;
 }
 
 .js-plotly-plot { border-radius: 8px; }
@@ -305,7 +322,7 @@ with st.sidebar:
 
     st.markdown("---")
     st.markdown("""
-    <div style='font-size:10px; color:#000000 !important; font-family: IBM Plex Mono, monospace;'>
+    <div style='font-size:10px; color:#000000 !important; font-family: Calibri, Segoe UI, Arial, sans-serif;'>
     <strong>DATA SOURCE</strong><br>
     <a href='https://opendata.oizom.com' style='color:#c2410c'>opendata.oizom.com</a><br><br>
     <strong>REFERENCE</strong><br>
@@ -349,16 +366,16 @@ if not data_store:
 
 # ── Header ────────────────────────────────────────────────────────────────────
 st.markdown("""
-<div style='padding:8px 0 24px 0'>
-  <div style='font-family:IBM Plex Mono,monospace; font-size:11px; color:#c2410c;
-              letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; font-weight:600;'>
+<div style='padding:14px 22px 20px 22px; background:#bfdbfe; border-radius:12px; margin-bottom:16px; border:1px solid #93c5fd;'>
+  <div style='font-family:Calibri,Segoe UI,Arial,sans-serif; font-size:12px; color:#c2410c;
+              letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; font-weight:700;'>
     WRI India · Indoor Occupational Heat Stress
   </div>
-  <h1 style='margin:0; font-family:IBM Plex Sans,sans-serif; font-weight:700;
-             font-size:26px; color:#000000; letter-spacing:-0.5px;'>
+  <h1 style='margin:0; font-family:Calibri,Segoe UI,Arial,sans-serif; font-weight:700;
+             font-size:26px; color:#000000; letter-spacing:-0.3px;'>
     Prayagraj Dyeing &amp; Printing Pvt. Ltd. — Live Sensor Dashboard
   </h1>
-  <p style='margin:4px 0 0 0; color:#000000; font-size:13px; font-weight:500;'>
+  <p style='margin:6px 0 0 0; color:#000000; font-size:13px; font-weight:500; font-family:Calibri,Segoe UI,Arial,sans-serif;'>
     Surat · 15 Sensor Nodes · Heat Index Analysis
   </p>
 </div>
@@ -394,11 +411,11 @@ def summary_table() -> pd.DataFrame:
         })
     return pd.DataFrame(rows)
 
-# Plotly shared theme
+# Plotly shared theme — Calibri font, light blue backgrounds, all black text
 PLOTLY_LAYOUT = dict(
-    paper_bgcolor="#ffffff",
-    plot_bgcolor="#f8f9fa",
-    font=dict(family="IBM Plex Mono", color="#000000", size=12),
+    paper_bgcolor="#dbeafe",
+    plot_bgcolor="#eff6ff",
+    font=dict(family="Calibri, Segoe UI, Arial, sans-serif", color="#000000", size=13),
 )
 
 
@@ -539,9 +556,9 @@ with tab_heatmap:
 
         fig.update_layout(
             **PLOTLY_LAYOUT,
-            xaxis=dict(title="Heat Index (°F)", gridcolor="#dee2e6", color="#000000",
+            xaxis=dict(title="Heat Index (°F)", gridcolor="#bfdbfe", color="#000000",
                        range=[min(hi_vals)-5, max(hi_vals)+30]),
-            yaxis=dict(gridcolor="#dee2e6", color="#000000"),
+            yaxis=dict(gridcolor="#bfdbfe", color="#000000"),
             margin=dict(l=0, r=80, t=20, b=40),
             height=500,
         )
@@ -570,8 +587,8 @@ with tab_heatmap:
         )
         fig2.update_layout(
             **PLOTLY_LAYOUT,
-            xaxis=dict(gridcolor="#dee2e6", color="#000000"),
-            yaxis=dict(gridcolor="#dee2e6", color="#000000"),
+            xaxis=dict(gridcolor="#bfdbfe", color="#000000"),
+            yaxis=dict(gridcolor="#bfdbfe", color="#000000"),
             margin=dict(l=0, r=0, t=20, b=40),
             height=400,
         )
@@ -611,7 +628,7 @@ with tab_trends:
             fig3.add_hline(y=y, line_dash="dot", line_color=color,
                            line_width=1, row=3, col=1)
 
-        axis_style = dict(gridcolor="#dee2e6", color="#000000", linecolor="#000000")
+        axis_style = dict(gridcolor="#bfdbfe", color="#000000", linecolor="#000000")
         fig3.update_layout(
             **PLOTLY_LAYOUT,
             xaxis3=axis_style, yaxis=axis_style, yaxis2=axis_style, yaxis3=axis_style,
@@ -647,8 +664,8 @@ with tab_trends:
         ))
     fig4.update_layout(
         **PLOTLY_LAYOUT,
-        xaxis=dict(gridcolor="#dee2e6", color="#000000"),
-        yaxis=dict(gridcolor="#dee2e6", color="#000000", title="Heat Index (°F)"),
+        xaxis=dict(gridcolor="#bfdbfe", color="#000000"),
+        yaxis=dict(gridcolor="#bfdbfe", color="#000000", title="Heat Index (°F)"),
         legend=dict(bgcolor="#f8f9fa", bordercolor="#dee2e6",
                     font=dict(color="#000000", size=10)),
         margin=dict(l=0, r=0, t=20, b=40),
@@ -672,26 +689,30 @@ with tab_hi:
                          for RH in rh_range])
 
     fig5 = go.Figure(go.Heatmap(
-    z=z_matrix,
-    x=[f"{r}%" for r in rh_range],
-    y=[f"{t}°F ({(t-32)*5/9:.0f}°C)" for t in temp_range],
-    colorscale=[[0,"#16a34a"],[0.25,"#ca8a04"],
-                [0.55,"#ea580c"],[0.75,"#dc2626"],[1.0,"#7f1d1d"]],
-    text=[[str(v) for v in row] for row in z_matrix],
-    texttemplate="%{text}",
-    textfont=dict(size=9, family="IBM Plex Mono", color="#000000"),
-    hovertemplate="Temp: %{y}<br>RH: %{x}<br>HI: %{z}°F<extra></extra>",
-    showscale=True,
-    colorbar=dict(
-        title="HI (°F)",  # ✅ FIXED (string instead of dict)
-        tickfont=dict(family="IBM Plex Mono", color="#000000"),
-    ),
-))
+        z=z_matrix,
+        x=[f"{r}%" for r in rh_range],
+        y=[f"{t}°F ({(t-32)*5/9:.0f}°C)" for t in temp_range],
+        colorscale=[[0,"#16a34a"],[0.25,"#ca8a04"],
+                    [0.55,"#ea580c"],[0.75,"#dc2626"],[1.0,"#7f1d1d"]],
+        text=[[str(v) for v in row] for row in z_matrix],
+        texttemplate="%{text}",
+        textfont=dict(size=9, family="Calibri, Segoe UI, Arial, sans-serif", color="#000000"),
+        hovertemplate="Temp: %{y}<br>RH: %{x}<br>HI: %{z}°F<extra></extra>",
+        showscale=True,
+        colorbar=dict(
+            title=dict(text="HI (°F)",
+                       font=dict(family="Calibri, Segoe UI, Arial, sans-serif", color="#000000")),
+            tickfont=dict(family="Calibri, Segoe UI, Arial, sans-serif", color="#000000"),
+        ),
+    ))
     fig5.update_layout(
-        **PLOTLY_LAYOUT,
-        plot_bgcolor="#ffffff",
-        xaxis=dict(title="Relative Humidity", color="#000000"),
-        yaxis=dict(title="Air Temperature",   color="#000000"),
+        paper_bgcolor=PLOTLY_LAYOUT["paper_bgcolor"],
+        plot_bgcolor="#eff6ff",
+        font=PLOTLY_LAYOUT["font"],
+        xaxis=dict(title="Relative Humidity (%)", color="#000000",
+                   tickfont=dict(family="Calibri, Segoe UI, Arial, sans-serif", color="#000000")),
+        yaxis=dict(title="Air Temperature",        color="#000000",
+                   tickfont=dict(family="Calibri, Segoe UI, Arial, sans-serif", color="#000000")),
         margin=dict(l=0, r=0, t=20, b=40),
         height=550,
     )
@@ -712,7 +733,7 @@ with tab_hi:
             st.markdown(f"""
             <div class='metric-card' style='margin-bottom:8px'>
               <span class='badge badge-{level}'>{name}</span>
-              <span style='margin-left:8px; font-family:IBM Plex Mono; font-size:12px;
+              <span style='margin-left:8px; font-family:Calibri,Segoe UI,Arial,sans-serif; font-size:12px;
                            color:#000000; font-weight:600'>{rng}</span>
               <div style='font-size:12px; color:#000000; margin-top:6px'>{desc}</div>
             </div>""", unsafe_allow_html=True)
@@ -754,17 +775,17 @@ with tab_devices:
                               gap:8px;margin-top:12px;'>
                     <div>
                       <div class='label'>Temp</div>
-                      <div style='font-family:IBM Plex Mono;font-size:16px;
+                      <div style='font-family:Calibri,Segoe UI,Arial,sans-serif;font-size:16px;
                                   color:#c2410c;font-weight:600'>{temp_c:.1f}°C</div>
                     </div>
                     <div>
                       <div class='label'>RH</div>
-                      <div style='font-family:IBM Plex Mono;font-size:16px;
+                      <div style='font-family:Calibri,Segoe UI,Arial,sans-serif;font-size:16px;
                                   color:#0369a1;font-weight:600'>{hum:.1f}%</div>
                     </div>
                     <div>
                       <div class='label'>HI</div>
-                      <div style='font-family:IBM Plex Mono;font-size:16px;
+                      <div style='font-family:Calibri,Segoe UI,Arial,sans-serif;font-size:16px;
                                   color:#b91c1c;font-weight:600'>{hi_f:.1f}°F</div>
                     </div>
                   </div>
@@ -890,7 +911,7 @@ Data: [opendata.oizom.com](https://opendata.oizom.com)
 
     st.markdown("---")
     st.markdown("""
-    <div style='font-family:IBM Plex Mono,monospace;font-size:10px;
+    <div style='font-family:Calibri,Segoe UI,Arial,sans-serif;font-size:10px;
                 color:#000000;text-align:center;font-weight:500'>
     © World Resources Institute · Dashboard for research purposes only ·
     Data: Oizom OpenData API · Heat Index: NWS Rothfusz Regression
