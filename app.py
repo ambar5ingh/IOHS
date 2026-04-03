@@ -23,168 +23,126 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Calibri:wght@400;600;700&display=swap');
-
 :root {
     --bg: #dbeafe;
     --surface: #bfdbfe;
     --surface2: #eff6ff;
     --border: #93c5fd;
-    --text: #000000;
-    --muted: #000000;
-    --accent: #e85d04;
-    --accent2: #dc2626;
-    --safe: #16a34a;
-    --warn: #b45309;
-    --danger: #c2410c;
-    --extreme: #b91c1c;
     --font: 'Calibri', 'Segoe UI', Arial, sans-serif;
 }
 
-html, body, [class*="css"] {
+/* ── Global base ── */
+html, body, [class*="css"], .stApp {
     font-family: var(--font) !important;
     background-color: var(--bg) !important;
     color: #000000 !important;
 }
-
 .stApp { background-color: var(--bg) !important; }
 
+/* ── Sidebar ── */
 [data-testid="stSidebar"] {
     background-color: var(--surface) !important;
-    border-right: 1px solid var(--border);
+    border-right: 2px solid var(--border) !important;
 }
-
-/* Force ALL text black everywhere */
-p, span, div, li, label, h1, h2, h3, h4, h5, h6,
-.stMarkdown, .stText, [class*="css"] {
+[data-testid="stSidebar"] * {
     color: #000000 !important;
     font-family: var(--font) !important;
 }
-
-.metric-card {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 18px 22px;
-    margin-bottom: 12px;
-    color: #000000 !important;
-    box-shadow: 0 2px 6px rgba(59,130,246,0.10);
-}
-.metric-card .label {
-    font-family: var(--font) !important;
-    font-size: 11px;
-    color: #000000 !important;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    margin-bottom: 4px;
-    font-weight: 600;
-}
-.metric-card .value {
-    font-family: var(--font) !important;
-    font-size: 30px;
-    font-weight: 700;
-    line-height: 1.1;
-    color: #000000 !important;
-}
-.metric-card .sub {
-    font-size: 12px;
-    color: #000000 !important;
-    margin-top: 4px;
-    font-family: var(--font) !important;
-}
-
-/* Value colour overrides */
-.v-safe    { color: #15803d !important; }
-.v-caution { color: #92400e !important; }
-.v-danger  { color: #c2410c !important; }
-.v-extreme { color: #991b1b !important; }
-
-.badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 4px;
-    font-family: var(--font) !important;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
-.badge-safe    { background: #dcfce7; color: #14532d !important; border: 1px solid #86efac; }
-.badge-caution { background: #fef9c3; color: #713f12 !important; border: 1px solid #fde047; }
-.badge-danger  { background: #ffedd5; color: #7c2d12 !important; border: 1px solid #fdba74; }
-.badge-extreme { background: #fee2e2; color: #7f1d1d !important; border: 1px solid #fca5a5; }
-
-.section-header {
-    font-family: var(--font) !important;
-    font-size: 12px;
-    color: #000000 !important;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    padding: 0 0 8px 0;
-    border-bottom: 2px solid var(--border);
-    margin-bottom: 16px;
-    font-weight: 700;
-}
-
-hr { border-color: var(--border) !important; }
-
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-header {visibility: hidden;}
-
-.stDataFrame { border: 1px solid var(--border); border-radius: 8px; }
-
-/* Alert box */
-.alert-box {
-    border-left: 4px solid #c2410c;
-    background: #fff7ed;
-    color: #000000 !important;
-    padding: 14px 18px;
-    border-radius: 0 6px 6px 0;
-    margin: 8px 0;
-    font-size: 14px;
-    font-weight: 500;
-    font-family: var(--font) !important;
-}
-.alert-box * { color: #000000 !important; font-family: var(--font) !important; }
-.alert-box strong { color: #000000 !important; font-weight: 700; }
-
-.main-title {
-    font-family: var(--font) !important;
-    font-size: 22px;
-    font-weight: 700;
-    color: #000000 !important;
-}
-.main-subtitle {
-    font-family: var(--font) !important;
-    font-size: 13px;
-    color: #000000 !important;
-    margin-top: 2px;
-}
-
-/* ── Tab styling ── */
-.stTabs [data-baseweb="tab"] {
-    font-family: var(--font) !important;
-    font-weight: 600;
-    color: #000000 !important;
-}
-
-/* ── Fix dark code blocks ── */
-code, pre, [data-testid="stCode"], .stCode,
-div[class*="stCodeBlock"], .stMarkdown code, .stMarkdown pre {
-    background-color: #dbeafe !important;
+/* Sidebar collapse/expand button */
+[data-testid="collapsedControl"],
+[data-testid="stSidebarCollapsedControl"],
+button[kind="headerNoPadding"],
+[data-testid="stSidebar"] button {
+    background-color: #bfdbfe !important;
     color: #000000 !important;
     border: 1px solid #93c5fd !important;
-    font-family: Calibri, Segoe UI, Arial, sans-serif !important;
-    border-radius: 6px !important;
+}
+[data-testid="collapsedControl"] svg,
+[data-testid="stSidebarCollapsedControl"] svg,
+[data-testid="stSidebar"] button svg {
+    fill: #000000 !important;
+    color: #000000 !important;
 }
 
-/* ── Fix dark dropdowns / selectboxes ── */
-/* Outer container */
-[data-baseweb="select"] {
+/* ── Force all text black ── */
+p, span, div, li, label, h1, h2, h3, h4, h5, h6,
+.stMarkdown, .stText {
+    color: #000000 !important;
+    font-family: var(--font) !important;
+}
+
+/* ── Date input ── */
+[data-testid="stDateInput"] input,
+[data-testid="stDateInput"] div,
+[data-testid="stDateInput"] span,
+input[type="text"],
+.stDateInput input {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-family: var(--font) !important;
+    border: 1px solid #93c5fd !important;
+    border-radius: 6px !important;
+}
+[data-testid="stDateInput"] label,
+[data-testid="stDateInput"] p {
+    color: #000000 !important;
+    font-family: var(--font) !important;
+    font-weight: 600 !important;
+}
+/* Date picker calendar popup */
+[data-baseweb="calendar"],
+[data-baseweb="datepicker"],
+[data-baseweb="calendar"] * {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-family: var(--font) !important;
+}
+[data-baseweb="calendar"] button {
+    color: #000000 !important;
     background-color: #ffffff !important;
 }
-/* The visible input box */
+[data-baseweb="calendar"] button:hover {
+    background-color: #dbeafe !important;
+}
+[data-baseweb="calendar"] [aria-selected="true"] {
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+}
+
+/* ── Sidebar buttons (preset 6h/24h etc.) ── */
+[data-testid="stSidebar"] .stButton button {
+    background-color: #eff6ff !important;
+    color: #000000 !important;
+    font-family: var(--font) !important;
+    font-weight: 700 !important;
+    border: 1px solid #93c5fd !important;
+    border-radius: 6px !important;
+    font-size: 13px !important;
+}
+[data-testid="stSidebar"] .stButton button:hover {
+    background-color: #bfdbfe !important;
+    color: #000000 !important;
+}
+
+/* ── Toggle ── */
+[data-testid="stToggle"] label,
+[data-testid="stToggle"] span,
+[data-testid="stToggle"] p {
+    color: #000000 !important;
+    font-family: var(--font) !important;
+    font-weight: 600 !important;
+}
+
+/* ── Checkboxes ── */
+[data-testid="stCheckbox"] label,
+[data-testid="stCheckbox"] span,
+[data-testid="stCheckbox"] p {
+    color: #000000 !important;
+    font-family: var(--font) !important;
+}
+
+/* ── Selectbox ── */
+[data-baseweb="select"],
 [data-baseweb="select"] > div,
 [data-baseweb="select"] > div > div {
     background-color: #ffffff !important;
@@ -192,52 +150,52 @@ div[class*="stCodeBlock"], .stMarkdown code, .stMarkdown pre {
     font-family: var(--font) !important;
     border-color: #93c5fd !important;
 }
-/* The selected value text */
 [data-baseweb="select"] span,
-[data-baseweb="select"] div[class*="ValueContainer"] span,
-[data-baseweb="select"] div[class*="singleValue"] {
+[data-baseweb="select"] [class*="singleValue"],
+[data-baseweb="select"] [class*="ValueContainer"] span {
     color: #000000 !important;
     font-family: var(--font) !important;
 }
-/* Dropdown arrow icon */
-[data-baseweb="select"] svg { color: #000000 !important; }
-
-/* Dropdown open popover/listbox */
-[data-baseweb="popover"],
-[data-baseweb="menu"],
-ul[data-baseweb="menu"],
-[role="listbox"],
-[data-baseweb="list"] {
+[data-baseweb="select"] svg { color: #000000 !important; fill: #000000 !important; }
+[data-baseweb="popover"], [data-baseweb="menu"], [role="listbox"] {
     background-color: #ffffff !important;
     border: 1px solid #93c5fd !important;
 }
-/* Individual options */
-[role="option"],
-[data-baseweb="option"],
-li[role="option"] {
+[role="option"], li[role="option"] {
     background-color: #ffffff !important;
     color: #000000 !important;
     font-family: var(--font) !important;
 }
-[role="option"]:hover,
-[data-baseweb="option"]:hover {
-    background-color: #dbeafe !important;
-    color: #000000 !important;
-}
+[role="option"]:hover { background-color: #dbeafe !important; }
 
-/* ── Stremlit native widget labels ── */
-.stSelectbox label,
-.stMultiSelect label,
-.stCheckbox label,
-.stToggle label,
-.stRadio label,
-[data-testid="stWidgetLabel"] {
+/* ── Widget labels ── */
+.stSelectbox label, .stMultiSelect label,
+.stCheckbox label, .stToggle label, .stRadio label,
+[data-testid="stWidgetLabel"],
+[data-testid="stWidgetLabel"] p {
     font-family: var(--font) !important;
     color: #000000 !important;
-    font-weight: 600;
+    font-weight: 600 !important;
 }
 
-/* ── Plotly chart y-axis labels & all SVG text ── */
+/* ── Code blocks ── */
+code, pre, .stMarkdown code, .stMarkdown pre,
+div[class*="stCodeBlock"] {
+    background-color: #dbeafe !important;
+    color: #000000 !important;
+    border: 1px solid #93c5fd !important;
+    font-family: var(--font) !important;
+    border-radius: 6px !important;
+}
+
+/* ── Tabs ── */
+.stTabs [data-baseweb="tab"] {
+    font-family: var(--font) !important;
+    font-weight: 600 !important;
+    color: #000000 !important;
+}
+
+/* ── Plotly SVG text ── */
 .js-plotly-plot .plotly text,
 .js-plotly-plot .plotly .ytick text,
 .js-plotly-plot .plotly .xtick text,
@@ -246,8 +204,9 @@ li[role="option"] {
     fill: #000000 !important;
     font-family: var(--font) !important;
 }
+.js-plotly-plot { border-radius: 8px; }
 
-/* ── Metric delta & number widgets ── */
+/* ── Metrics ── */
 [data-testid="stMetricValue"],
 [data-testid="stMetricLabel"],
 [data-testid="stMetricDelta"] {
@@ -260,15 +219,86 @@ li[role="option"] {
     background-color: #2563eb !important;
     color: #ffffff !important;
     font-family: var(--font) !important;
-    font-weight: 600;
-    border-radius: 6px;
-    border: none;
+    font-weight: 600 !important;
+    border-radius: 6px !important;
+    border: none !important;
 }
-.stDownloadButton button:hover {
-    background-color: #1d4ed8 !important;
+.stDownloadButton button:hover { background-color: #1d4ed8 !important; }
+
+/* ── Misc ── */
+hr { border-color: var(--border) !important; }
+#MainMenu, footer, header { visibility: hidden; }
+.stDataFrame { border: 1px solid var(--border); border-radius: 8px; }
+
+/* ── Metric cards ── */
+.metric-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 12px;
+    color: #000000 !important;
+    box-shadow: 0 2px 6px rgba(59,130,246,0.10);
+}
+.metric-card .label {
+    font-family: var(--font) !important;
+    font-size: 11px; color: #000000 !important;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    margin-bottom: 4px; font-weight: 600;
+}
+.metric-card .value {
+    font-family: var(--font) !important;
+    font-size: 30px; font-weight: 700;
+    line-height: 1.1; color: #000000 !important;
+}
+.metric-card .sub {
+    font-size: 12px; color: #000000 !important;
+    margin-top: 4px; font-family: var(--font) !important;
+}
+.v-safe    { color: #15803d !important; }
+.v-caution { color: #92400e !important; }
+.v-danger  { color: #c2410c !important; }
+.v-extreme { color: #991b1b !important; }
+
+/* ── Badges ── */
+.badge {
+    display: inline-block; padding: 3px 10px;
+    border-radius: 4px; font-family: var(--font) !important;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+}
+.badge-safe    { background:#dcfce7; color:#14532d !important; border:1px solid #86efac; }
+.badge-caution { background:#fef9c3; color:#713f12 !important; border:1px solid #fde047; }
+.badge-danger  { background:#ffedd5; color:#7c2d12 !important; border:1px solid #fdba74; }
+.badge-extreme { background:#fee2e2; color:#7f1d1d !important; border:1px solid #fca5a5; }
+
+/* ── Section header ── */
+.section-header {
+    font-family: var(--font) !important; font-size: 12px;
+    color: #000000 !important; text-transform: uppercase;
+    letter-spacing: 2px; padding: 0 0 8px 0;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 16px; font-weight: 700;
 }
 
-.js-plotly-plot { border-radius: 8px; }
+/* ── Alert box ── */
+.alert-box {
+    border-left: 4px solid #c2410c; background: #fff7ed;
+    color: #000000 !important; padding: 14px 18px;
+    border-radius: 0 6px 6px 0; margin: 8px 0;
+    font-size: 14px; font-weight: 500; font-family: var(--font) !important;
+}
+.alert-box * { color: #000000 !important; font-family: var(--font) !important; }
+.alert-box strong { color: #000000 !important; font-weight: 700; }
+
+.main-title {
+    font-family: var(--font) !important; font-size: 22px;
+    font-weight: 700; color: #000000 !important;
+}
+.main-subtitle {
+    font-family: var(--font) !important; font-size: 13px;
+    color: #000000 !important; margin-top: 2px;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -558,12 +588,49 @@ def summary_table() -> pd.DataFrame:
         })
     return pd.DataFrame(rows)
 
-# Plotly shared theme — Calibri font, light blue backgrounds, all black text
-PLOTLY_LAYOUT = dict(
-    paper_bgcolor="#dbeafe",
-    plot_bgcolor="#eff6ff",
-    font=dict(family="Calibri, Segoe UI, Arial, sans-serif", color="#000000", size=13),
-)
+# ── Plotly 6-safe theme helper ────────────────────────────────────────────────
+# Plotly 6 on Python 3.14 crashes when nested dicts (xaxis, yaxis, font…) are
+# passed together in one update_layout() call.  The only safe pattern is:
+#   1. set scalar-only keys (bgcolor, height, margin) via update_layout()
+#   2. set axis properties via update_xaxes() / update_yaxes()
+#   3. set font via update_layout with font= alone if needed
+
+_FONT   = "Calibri, Segoe UI, Arial, sans-serif"
+_TF     = dict(color="#000000", family=_FONT, size=12)   # tickfont shorthand
+_GRID   = "#bfdbfe"
+
+def _apply_theme(fig, height=400, margin=None, legend=None, showlegend=False):
+    """Apply base theme using only scalar / safe kwargs."""
+    mg = margin or dict(l=60, r=20, t=40, b=40)
+    fig.update_layout(
+        paper_bgcolor="#dbeafe",
+        plot_bgcolor="#eff6ff",
+        height=height,
+        showlegend=showlegend,
+        margin=mg,
+    )
+    # Font must be set in its own call to avoid merge conflicts
+    fig.update_layout(font=dict(family=_FONT, color="#000000", size=13))
+    if legend is not None:
+        fig.update_layout(legend=legend)
+
+def _style_axes(fig, xtitle="", ytitle="", xrange=None):
+    """Apply axis styling via update_xaxes / update_yaxes (Plotly-6 safe)."""
+    xkw = dict(gridcolor=_GRID, linecolor="#93c5fd", color="#000000",
+               tickfont=_TF, automargin=True)
+    if xtitle:
+        xkw["title_text"] = xtitle
+        xkw["title_font"] = dict(color="#000000", family=_FONT)
+    if xrange:
+        xkw["range"] = xrange
+    fig.update_xaxes(**xkw)
+
+    ykw = dict(gridcolor=_GRID, linecolor="#93c5fd", color="#000000",
+               tickfont=_TF, automargin=True)
+    if ytitle:
+        ykw["title_text"] = ytitle
+        ykw["title_font"] = dict(color="#000000", family=_FONT)
+    fig.update_yaxes(**ykw)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -701,21 +768,9 @@ with tab_heatmap:
                           annotation_font_color="#000000",
                           annotation_font_size=10)
 
-        fig.update_layout(PLOTLY_LAYOUT)
-        fig.update_layout(
-            xaxis=dict(
-                title="Heat Index (°F)", gridcolor="#bfdbfe", color="#000000",
-                tickfont=dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif", size=12),
-                titlefont=dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif"),
-                range=[min(hi_vals)-5, max(hi_vals)+30],
-            ),
-            yaxis=dict(
-                gridcolor="#bfdbfe", color="#000000", automargin=True,
-                tickfont=dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif", size=12),
-            ),
-            margin=dict(l=220, r=80, t=20, b=40),
-            height=520,
-        )
+        _apply_theme(fig, height=520, margin=dict(l=220, r=80, t=20, b=40))
+        _style_axes(fig, xtitle="Heat Index (°F)",
+                    xrange=[min(hi_vals)-5, max(hi_vals)+30])
         st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("<div class='section-header'>Temperature × Humidity Scatter</div>",
@@ -739,15 +794,9 @@ with tab_heatmap:
             color_continuous_scale=["#16a34a","#ca8a04","#ea580c","#dc2626"],
             labels={"Temperature":"Temp (°C)","Humidity":"RH (%)","HI_F":"HI (°F)"},
         )
-        _tf = dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif", size=12)
-        fig2.update_layout(PLOTLY_LAYOUT)
-        fig2.update_layout(
-            xaxis=dict(gridcolor="#bfdbfe", color="#000000", tickfont=_tf),
-            yaxis=dict(gridcolor="#bfdbfe", color="#000000", tickfont=_tf),
-            coloraxis_colorbar=dict(tickfont=_tf, title=dict(font=_tf)),
-            margin=dict(l=0, r=0, t=20, b=40),
-            height=400,
-        )
+        _apply_theme(fig2, height=400, margin=dict(l=20, r=20, t=20, b=40))
+        _style_axes(fig2, xtitle="Temp (°C)", ytitle="RH (%)")
+        fig2.update_layout(coloraxis_colorbar=dict(tickfont=_TF, title=dict(font=_TF)))
         st.plotly_chart(fig2, use_container_width=True)
 
 
@@ -784,19 +833,15 @@ with tab_trends:
             fig3.add_hline(y=y, line_dash="dot", line_color=color,
                            line_width=1, row=3, col=1)
 
-        _tf = dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif", size=12)
-        axis_style = dict(gridcolor="#bfdbfe", color="#000000", linecolor="#000000", tickfont=_tf)
-        fig3.update_layout(PLOTLY_LAYOUT)
+        _apply_theme(fig3, height=600, margin=dict(l=60, r=20, t=40, b=40))
+        _style_axes(fig3)
         fig3.update_layout(
-            xaxis3=axis_style, yaxis=axis_style, yaxis2=axis_style, yaxis3=axis_style,
-            legend=dict(bgcolor="#eff6ff", bordercolor="#93c5fd", font=dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif")),
-            margin=dict(l=60, r=0, t=40, b=40),
-            height=600, showlegend=False,
+            legend=dict(bgcolor="#eff6ff", bordercolor="#93c5fd",
+                        font=dict(color="#000000", family=_FONT)),
         )
-        # Subplot title colour
         for ann in fig3.layout.annotations:
-            ann.font.color = "#000000"
-            ann.font.family = "Calibri, Segoe UI, Arial, sans-serif"
+            ann.font.color  = "#000000"
+            ann.font.family = _FONT
         st.plotly_chart(fig3, use_container_width=True)
 
         c1, c2, c3, c4, c5 = st.columns(5)
@@ -820,17 +865,11 @@ with tab_trends:
             mode="lines", name=info["name"],
             line=dict(color=palette[i % len(palette)], width=1.5),
         ))
-    _tf = dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif", size=12)
-    fig4.update_layout(PLOTLY_LAYOUT)
-    fig4.update_layout(
-        xaxis=dict(gridcolor="#bfdbfe", color="#000000", tickfont=_tf),
-        yaxis=dict(gridcolor="#bfdbfe", color="#000000", title="Heat Index (°F)",
-                   tickfont=_tf, titlefont=dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif")),
-        legend=dict(bgcolor="#eff6ff", bordercolor="#93c5fd",
-                    font=dict(color="#000000", size=11, family="Calibri, Segoe UI, Arial, sans-serif")),
-        margin=dict(l=60, r=0, t=20, b=40),
-        height=400,
-    )
+    _apply_theme(fig4, height=400, margin=dict(l=60, r=20, t=20, b=40),
+                 showlegend=True,
+                 legend=dict(bgcolor="#eff6ff", bordercolor="#93c5fd",
+                             font=dict(color="#000000", size=11, family=_FONT)))
+    _style_axes(fig4, ytitle="Heat Index (°F)")
     st.plotly_chart(fig4, use_container_width=True)
 
 
@@ -865,17 +904,8 @@ with tab_hi:
             tickfont=dict(family="Calibri, Segoe UI, Arial, sans-serif", color="#000000"),
         ),
     ))
-    fig5.update_layout(
-        paper_bgcolor=PLOTLY_LAYOUT["paper_bgcolor"],
-        plot_bgcolor="#eff6ff",
-        font=PLOTLY_LAYOUT["font"],
-        xaxis=dict(title="Relative Humidity (%)", color="#000000",
-                   tickfont=dict(family="Calibri, Segoe UI, Arial, sans-serif", color="#000000")),
-        yaxis=dict(title="Air Temperature",        color="#000000",
-                   tickfont=dict(family="Calibri, Segoe UI, Arial, sans-serif", color="#000000")),
-        margin=dict(l=0, r=0, t=20, b=40),
-        height=550,
-    )
+    _apply_theme(fig5, height=550, margin=dict(l=20, r=20, t=20, b=40))
+    _style_axes(fig5, xtitle="Relative Humidity (%)", ytitle="Air Temperature")
     st.plotly_chart(fig5, use_container_width=True)
 
     st.markdown("<div class='section-header'>Risk Levels</div>", unsafe_allow_html=True)
