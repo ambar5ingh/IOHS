@@ -48,19 +48,50 @@ html, body, [class*="css"], .stApp {
     color: #000000 !important;
     font-family: var(--font) !important;
 }
-/* Sidebar collapse/expand button */
+/* ── Sidebar collapse/expand button — all possible Streamlit selectors ── */
 [data-testid="collapsedControl"],
 [data-testid="stSidebarCollapsedControl"],
+[data-testid="stSidebarNavCollapseButton"],
 button[kind="headerNoPadding"],
-[data-testid="stSidebar"] button {
-    background-color: #bfdbfe !important;
-    color: #000000 !important;
-    border: 1px solid #93c5fd !important;
+button[data-testid="baseButton-headerNoPadding"],
+button[aria-label="Collapse sidebar"],
+button[aria-label="Expand sidebar"],
+button[aria-label="Close sidebar"],
+button[aria-label="Open sidebar"] {
+    background-color: #1d4ed8 !important;
+    color: #ffffff !important;
+    border: 2px solid #1e40af !important;
+    border-radius: 50% !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.5) !important;
 }
 [data-testid="collapsedControl"] svg,
 [data-testid="stSidebarCollapsedControl"] svg,
-[data-testid="stSidebar"] button svg {
-    fill: #000000 !important;
+button[aria-label="Collapse sidebar"] svg,
+button[aria-label="Expand sidebar"] svg,
+button[aria-label="Close sidebar"] svg,
+button[aria-label="Open sidebar"] svg,
+button[kind="headerNoPadding"] svg,
+button[data-testid="baseButton-headerNoPadding"] svg {
+    fill: #ffffff !important;
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+    opacity: 1 !important;
+}
+
+/* ── Sidebar inner buttons (preset 6h/24h/48h/7d + Apply) ── */
+[data-testid="stSidebar"] .stButton > button {
+    background-color: #eff6ff !important;
+    color: #000000 !important;
+    font-family: var(--font) !important;
+    font-weight: 700 !important;
+    border: 1px solid #93c5fd !important;
+    border-radius: 6px !important;
+    font-size: 13px !important;
+}
+[data-testid="stSidebar"] .stButton > button:hover {
+    background-color: #bfdbfe !important;
     color: #000000 !important;
 }
 
@@ -107,21 +138,6 @@ input[type="text"],
 [data-baseweb="calendar"] [aria-selected="true"] {
     background-color: #2563eb !important;
     color: #ffffff !important;
-}
-
-/* ── Sidebar buttons (preset 6h/24h etc.) ── */
-[data-testid="stSidebar"] .stButton button {
-    background-color: #eff6ff !important;
-    color: #000000 !important;
-    font-family: var(--font) !important;
-    font-weight: 700 !important;
-    border: 1px solid #93c5fd !important;
-    border-radius: 6px !important;
-    font-size: 13px !important;
-}
-[data-testid="stSidebar"] .stButton button:hover {
-    background-color: #bfdbfe !important;
-    color: #000000 !important;
 }
 
 /* ── Toggle ── */
