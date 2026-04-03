@@ -59,12 +59,28 @@ button[aria-label="Expand sidebar"],
 button[aria-label="Close sidebar"],
 button[aria-label="Open sidebar"] {
     background-color: #1d4ed8 !important;
-    color: #ffffff !important;
+    color: transparent !important;
     border: 2px solid #1e40af !important;
     border-radius: 50% !important;
     opacity: 1 !important;
     visibility: visible !important;
     box-shadow: 0 2px 8px rgba(37,99,235,0.5) !important;
+    font-size: 0 !important;
+    overflow: hidden !important;
+}
+/* Hide leaked text labels inside collapse button */
+[data-testid="collapsedControl"] span,
+[data-testid="stSidebarCollapsedControl"] span,
+button[aria-label="Collapse sidebar"] span,
+button[aria-label="Expand sidebar"] span,
+button[aria-label="Close sidebar"] span,
+button[aria-label="Open sidebar"] span,
+button[kind="headerNoPadding"] span,
+button[data-testid="baseButton-headerNoPadding"] span {
+    display: none !important;
+    font-size: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
 }
 [data-testid="collapsedControl"] svg,
 [data-testid="stSidebarCollapsedControl"] svg,
@@ -78,6 +94,8 @@ button[data-testid="baseButton-headerNoPadding"] svg {
     color: #ffffff !important;
     stroke: #ffffff !important;
     opacity: 1 !important;
+    width: 20px !important;
+    height: 20px !important;
 }
 
 /* ── Sidebar inner buttons (preset 6h/24h/48h/7d + Apply) ── */
