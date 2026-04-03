@@ -1,7 +1,7 @@
 """
 Indoor Occupational Heat Stress Dashboard
-Prayagraj Dyeing and Printing Private Limited — Surat Textile MSME Study
-WRI Research Project
+Prayagraj Dyeing and Printing Private Limited — Surat
+WRI INDIA Research
 """
 
 import streamlit as st
@@ -17,7 +17,7 @@ import json
 
 # ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Heat Stress Monitor | Prayagraj Dyeing",
+    page_title="Heat Stress Monitor",
     page_icon="🌡️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -488,7 +488,10 @@ with tab_overview:
             }
             return colors.get(val, "")
 
-        styled = df_sum.style.applymap(style_risk, subset=["Risk"])
+        try:
+            styled = df_sum.style.map(style_risk, subset=["Risk"])
+        except AttributeError:
+            styled = df_sum.style.applymap(style_risk, subset=["Risk"])
         st.dataframe(styled, use_container_width=True, hide_index=True)
 
     # Alert panel
