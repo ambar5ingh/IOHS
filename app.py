@@ -672,22 +672,21 @@ with tab_hi:
                          for RH in rh_range])
 
     fig5 = go.Figure(go.Heatmap(
-        z=z_matrix,
-        x=[f"{r}%" for r in rh_range],
-        y=[f"{t}°F ({(t-32)*5/9:.0f}°C)" for t in temp_range],
-        colorscale=[[0,"#16a34a"],[0.25,"#ca8a04"],
-                    [0.55,"#ea580c"],[0.75,"#dc2626"],[1.0,"#7f1d1d"]],
-        text=[[str(v) for v in row] for row in z_matrix],
-        texttemplate="%{text}",
-        textfont=dict(size=9, family="IBM Plex Mono", color="#000000"),
-        hovertemplate="Temp: %{y}<br>RH: %{x}<br>HI: %{z}°F<extra></extra>",
-        showscale=True,
-        colorbar=dict(
-            title=dict(text="HI (°F)",
-                       font=dict(family="IBM Plex Mono", color="#000000")),
-            tickfont=dict(family="IBM Plex Mono", color="#000000"),
-        ),
-    ))
+    z=z_matrix,
+    x=[f"{r}%" for r in rh_range],
+    y=[f"{t}°F ({(t-32)*5/9:.0f}°C)" for t in temp_range],
+    colorscale=[[0,"#16a34a"],[0.25,"#ca8a04"],
+                [0.55,"#ea580c"],[0.75,"#dc2626"],[1.0,"#7f1d1d"]],
+    text=[[str(v) for v in row] for row in z_matrix],
+    texttemplate="%{text}",
+    textfont=dict(size=9, family="IBM Plex Mono", color="#000000"),
+    hovertemplate="Temp: %{y}<br>RH: %{x}<br>HI: %{z}°F<extra></extra>",
+    showscale=True,
+    colorbar=dict(
+        title="HI (°F)",  # ✅ FIXED (string instead of dict)
+        tickfont=dict(family="IBM Plex Mono", color="#000000"),
+    ),
+))
     fig5.update_layout(
         **PLOTLY_LAYOUT,
         plot_bgcolor="#ffffff",
