@@ -13,6 +13,7 @@ from plotly.subplots import make_subplots
 import requests
 from datetime import datetime, timedelta
 import time
+import math
 
 st.set_page_config(
     page_title="Heat Stress Monitor | Unit 1",
@@ -48,7 +49,7 @@ html, body, [class*="css"], .stApp {
     color: #000000 !important;
     font-family: var(--font) !important;
 }
-/* ── Sidebar collapse/expand button — all possible Streamlit selectors ── */
+/* ── Sidebar collapse/expand button ── */
 [data-testid="collapsedControl"],
 [data-testid="stSidebarCollapsedControl"],
 [data-testid="stSidebarNavCollapseButton"],
@@ -68,7 +69,6 @@ button[aria-label="Open sidebar"] {
     font-size: 0 !important;
     overflow: hidden !important;
 }
-/* Hide leaked text labels inside collapse button */
 [data-testid="collapsedControl"] span,
 [data-testid="stSidebarCollapsedControl"] span,
 button[aria-label="Collapse sidebar"] span,
@@ -98,7 +98,7 @@ button[data-testid="baseButton-headerNoPadding"] svg {
     height: 20px !important;
 }
 
-/* ── Sidebar inner buttons (preset 6h/24h/48h/7d + Apply) ── */
+/* ── Sidebar inner buttons ── */
 [data-testid="stSidebar"] .stButton > button {
     background-color: #eff6ff !important;
     color: #000000 !important;
@@ -138,7 +138,6 @@ input[type="text"],
     font-family: var(--font) !important;
     font-weight: 600 !important;
 }
-/* Date picker calendar popup */
 [data-baseweb="calendar"],
 [data-baseweb="datepicker"],
 [data-baseweb="calendar"] * {
@@ -366,18 +365,31 @@ API_KEY    = st.secrets.get("OIZOM_API_KEY", "")
 def celsius_to_fahrenheit(c: float) -> float:
     return c * 9 / 5 + 32
 
+def f_to_c(f: float) -> float:
+    return (f - 32) * 5 / 9
+
 def heat_index_fahrenheit(T_f: float, RH: float) -> float:
-    if T_f < 80:
-        return T_f
+    """Full NWS Rothfusz regression with low-RH and high-RH adjustments."""
+    # Simple formula first; if average with T < 80°F, use it directly
+    hi_simple = 0.5 * (T_f + 61.0 + (T_f - 68.0) * 1.2 + RH * 0.094)
+    if (hi_simple + T_f) / 2 < 80:
+        return hi_simple
+    # Full Rothfusz regression
     HI = (-42.379
-          + 2.04901523 * T_f
+          + 2.04901523  * T_f
           + 10.14333127 * RH
-          - 0.22475541 * T_f * RH
-          - 6.83783e-3 * T_f ** 2
-          - 5.481717e-2 * RH ** 2
-          + 1.22874e-3 * T_f ** 2 * RH
-          + 8.5282e-4 * T_f * RH ** 2
-          - 1.99e-6 * T_f ** 2 * RH ** 2)
+          - 0.22475541  * T_f * RH
+          - 6.83783e-3  * T_f ** 2
+          - 5.481717e-2 * RH  ** 2
+          + 1.22874e-3  * T_f ** 2 * RH
+          + 8.5282e-4   * T_f * RH ** 2
+          - 1.99e-6     * T_f ** 2 * RH ** 2)
+    # Low-RH adjustment
+    if RH < 13 and 80 <= T_f <= 112:
+        HI -= ((13 - RH) / 4) * math.sqrt((17 - abs(T_f - 95)) / 17)
+    # High-RH adjustment
+    if RH > 85 and 80 <= T_f <= 87:
+        HI += ((RH - 85) / 10) * ((87 - T_f) / 5)
     return HI
 
 def heat_index_category(hi_f: float):
@@ -466,7 +478,6 @@ with st.sidebar:
     st.markdown("<div style='font-size:12px;font-weight:700;color:#000000;text-transform:uppercase;"
                 "letter-spacing:1px;margin:8px 0 4px 0;'>Time Window</div>", unsafe_allow_html=True)
 
-    # Quick preset buttons
     preset_cols = st.columns(4)
     presets = [("6h", 6), ("24h", 24), ("48h", 48), ("7d", 168)]
     if "selected_hours" not in st.session_state:
@@ -476,20 +487,14 @@ with st.sidebar:
 
     for col, (label, hrs) in zip(preset_cols, presets):
         with col:
-            is_active = (not st.session_state.use_custom_dates
-                         and st.session_state.selected_hours == hrs)
-            btn_style = ("background:#2563eb;color:#fff;" if is_active
-                         else "background:#eff6ff;color:#000;")
-            if st.button(label, key=f"preset_{hrs}",
-                         use_container_width=True):
+            if st.button(label, key=f"preset_{hrs}", use_container_width=True):
                 st.session_state.selected_hours  = hrs
                 st.session_state.use_custom_dates = False
 
-    # Custom date range calendar
     st.markdown("<div style='font-size:11px;font-weight:600;color:#000000;"
                 "margin:10px 0 2px 0;'>Custom date range</div>", unsafe_allow_html=True)
-    today     = datetime.utcnow().date()
-    min_date  = today - timedelta(days=365)
+    today    = datetime.utcnow().date()
+    min_date = today - timedelta(days=365)
 
     date_range = st.date_input(
         "From → To",
@@ -514,7 +519,6 @@ with st.sidebar:
         else:
             st.error("'From' date must be before 'To' date.")
 
-    # Display active window info
     if st.session_state.use_custom_dates:
         st.markdown(f"<div style='font-size:11px;color:#1d4ed8;font-weight:600;"
                     f"background:#eff6ff;border:1px solid #93c5fd;border-radius:6px;"
@@ -550,8 +554,8 @@ with st.sidebar:
     NWS Heat Index Chart<br>
     Rothfusz Regression<br><br>
     <strong>UNITS</strong><br>
-    Temperature → °C / °F<br>
-    Heat Index → °F (NWS)
+    Temperature → °C<br>
+    Heat Index → °C (NWS)
     </div>
     """, unsafe_allow_html=True)
 
@@ -626,25 +630,16 @@ def summary_table() -> pd.DataFrame:
             "Zone":         info["zone"],
             "Temp (°C)":    round(row.get("Temperature", np.nan), 1),
             "Humidity (%)": round(row.get("Humidity",    np.nan), 1),
-            "HI (°F)":      round(hi_f, 1),
-            "HI (°C)":      round((hi_f-32)*5/9, 1) if not np.isnan(hi_f) else np.nan,
+            "HI (°C)":      round(f_to_c(hi_f), 1) if not np.isnan(hi_f) else np.nan,
             "Risk":         row.get("HI_Cat", "—"),
         })
     return pd.DataFrame(rows)
 
-# ── Plotly 6-safe theme helper ────────────────────────────────────────────────
-# Plotly 6 on Python 3.14 crashes when nested dicts (xaxis, yaxis, font…) are
-# passed together in one update_layout() call.  The only safe pattern is:
-#   1. set scalar-only keys (bgcolor, height, margin) via update_layout()
-#   2. set axis properties via update_xaxes() / update_yaxes()
-#   3. set font via update_layout with font= alone if needed
-
-_FONT   = "Calibri, Segoe UI, Arial, sans-serif"
-_TF     = dict(color="#000000", family=_FONT, size=12)   # tickfont shorthand
-_GRID   = "#bfdbfe"
+_FONT = "Calibri, Segoe UI, Arial, sans-serif"
+_TF   = dict(color="#000000", family=_FONT, size=12)
+_GRID = "#bfdbfe"
 
 def _apply_theme(fig, height=400, margin=None, legend=None, showlegend=False):
-    """Apply base theme using only scalar / safe kwargs."""
     mg = margin or dict(l=60, r=20, t=40, b=40)
     fig.update_layout(
         paper_bgcolor="#dbeafe",
@@ -653,13 +648,11 @@ def _apply_theme(fig, height=400, margin=None, legend=None, showlegend=False):
         showlegend=showlegend,
         margin=mg,
     )
-    # Font must be set in its own call to avoid merge conflicts
     fig.update_layout(font=dict(family=_FONT, color="#000000", size=13))
     if legend is not None:
         fig.update_layout(legend=legend)
 
 def _style_axes(fig, xtitle="", ytitle="", xrange=None):
-    """Apply axis styling via update_xaxes / update_yaxes (Plotly-6 safe)."""
     xkw = dict(gridcolor=_GRID, linecolor="#93c5fd", color="#000000",
                tickfont=_TF, automargin=True)
     if xtitle:
@@ -668,7 +661,6 @@ def _style_axes(fig, xtitle="", ytitle="", xrange=None):
     if xrange:
         xkw["range"] = xrange
     fig.update_xaxes(**xkw)
-
     ykw = dict(gridcolor=_GRID, linecolor="#93c5fd", color="#000000",
                tickfont=_TF, automargin=True)
     if ytitle:
@@ -698,7 +690,7 @@ with tab_overview:
             <div class='metric-card'>
               <div class='label'>Avg. Temperature</div>
               <div class='value v-{lv}'>{avg_temp:.1f}°C</div>
-              <div class='sub'>{celsius_to_fahrenheit(avg_temp):.1f}°F · {len(all_latest)} sensors</div>
+              <div class='sub'>{len(all_latest)} active sensors</div>
             </div>""", unsafe_allow_html=True)
         with kpi2:
             st.markdown(f"""
@@ -712,14 +704,14 @@ with tab_overview:
             st.markdown(f"""
             <div class='metric-card'>
               <div class='label'>Avg. Heat Index</div>
-              <div class='value v-{avg_lv}'>{avg_hi_f:.1f}°F</div>
-              <div class='sub'>{(avg_hi_f-32)*5/9:.1f}°C apparent temperature</div>
+              <div class='value v-{avg_lv}'>{f_to_c(avg_hi_f):.1f}°C</div>
+              <div class='sub'>Apparent temperature (Heat Index)</div>
             </div>""", unsafe_allow_html=True)
         with kpi4:
             st.markdown(f"""
             <div class='metric-card'>
               <div class='label'>Peak Heat Index</div>
-              <div class='value v-{max_level}'>{max_hi_f:.1f}°F</div>
+              <div class='value v-{max_level}'>{f_to_c(max_hi_f):.1f}°C</div>
               <div class='sub'>{selected_devices[max_loc]["name"]} &nbsp;
                 <span class='badge badge-{max_level}'>{max_cat}</span></div>
             </div>""", unsafe_allow_html=True)
@@ -758,13 +750,13 @@ with tab_overview:
             cat, level = heat_index_category(hi_f)
             st.markdown(f"""
             <div class='alert-box'>
-              <strong>{info['name']}</strong> ({did}) — Heat Index <strong>{hi_f:.1f}°F</strong>
+              <strong>{info['name']}</strong> ({did}) — Heat Index <strong>{f_to_c(hi_f):.1f}°C</strong>
               &nbsp;<span class='badge badge-{level}'>{cat}</span>
               &nbsp;· Temp {row['Temperature']:.1f}°C · RH {row['Humidity']:.1f}%
             </div>""", unsafe_allow_html=True)
             alert_count += 1
     if alert_count == 0:
-        st.success("✓ No devices currently exceeding Caution threshold (91°F Heat Index)")
+        st.success("✓ No devices currently exceeding Caution threshold (33°C Heat Index)")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -785,6 +777,7 @@ with tab_heatmap:
         cats.append(cat)
 
     if hi_vals:
+        hi_c_vals = [f_to_c(v) for v in hi_vals]
         color_map = {
             "Normal":         "#16a34a",
             "Caution":        "#ca8a04",
@@ -795,26 +788,24 @@ with tab_heatmap:
         bar_colors = [color_map.get(c, "#6b7280") for c in cats]
 
         fig = go.Figure(go.Bar(
-            x=hi_vals, y=names, orientation="h",
+            x=names, y=hi_c_vals, orientation="v",
             marker_color=bar_colors,
-            text=[f"{v:.1f}°F — {c}" for v, c in zip(hi_vals, cats)],
+            text=[f"{v:.1f}°C" for v in hi_c_vals],
             textposition="outside",
             textfont=dict(color="#000000", size=11),
-            hovertemplate="<b>%{y}</b><br>Heat Index: %{x:.1f}°F<extra></extra>",
+            hovertemplate="<b>%{x}</b><br>Heat Index: %{y:.1f}°C<extra></extra>",
         ))
-        for threshold, label, color in [
-                (80, "Caution",         "#16a34a"),
-                (91, "Extreme Caution", "#ca8a04"),
-                (103,"Danger",          "#ea580c"),
-                (125,"Extreme Danger",  "#dc2626")]:
-            fig.add_vline(x=threshold, line_dash="dot", line_color=color,
-                          annotation_text=label,
-                          annotation_font_color="#000000",
-                          annotation_font_size=10)
+        for threshold_f, color in [
+                (80,  "#16a34a"),
+                (91,  "#ca8a04"),
+                (103, "#ea580c"),
+                (125, "#dc2626")]:
+            fig.add_hline(y=f_to_c(threshold_f), line_dash="dot",
+                          line_color=color, line_width=1.5)
 
-        _apply_theme(fig, height=520, margin=dict(l=220, r=80, t=20, b=40))
-        _style_axes(fig, xtitle="Heat Index (°F)",
-                    xrange=[min(hi_vals)-5, max(hi_vals)+30])
+        _apply_theme(fig, height=520, margin=dict(l=60, r=20, t=40, b=160))
+        _style_axes(fig, ytitle="Heat Index (°C)")
+        fig.update_xaxes(tickangle=-40, tickfont=dict(size=10, family=_FONT, color="#000000"))
         st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("<div class='section-header'>Temperature × Humidity Scatter</div>",
@@ -832,11 +823,12 @@ with tab_heatmap:
 
     if all_dfs:
         big = pd.concat(all_dfs, ignore_index=True)
+        big["HI_C_col"] = big["HI_C"]
         fig2 = px.scatter(
-            big, x="Temperature", y="Humidity", color="HI_F",
+            big, x="Temperature", y="Humidity", color="HI_C_col",
             hover_data=["Location", "Time", "HI_Cat"],
             color_continuous_scale=["#16a34a","#ca8a04","#ea580c","#dc2626"],
-            labels={"Temperature":"Temp (°C)","Humidity":"RH (%)","HI_F":"HI (°F)"},
+            labels={"Temperature":"Temp (°C)","Humidity":"RH (%)","HI_C_col":"HI (°C)"},
         )
         _apply_theme(fig2, height=400, margin=dict(l=20, r=20, t=20, b=40))
         _style_axes(fig2, xtitle="Temp (°C)", ytitle="RH (%)")
@@ -863,18 +855,18 @@ with tab_trends:
                              vertical_spacing=0.06,
                              subplot_titles=("Temperature (°C)",
                                              "Relative Humidity (%)",
-                                             "Heat Index (°F)"))
+                                             "Heat Index (°C)"))
         fig3.add_trace(go.Scatter(x=df_t["Time"], y=df_t["Temperature"],
                                   mode="lines", name="Temp",
                                   line=dict(color="#ea580c", width=2)), row=1, col=1)
         fig3.add_trace(go.Scatter(x=df_t["Time"], y=df_t["Humidity"],
                                   mode="lines", name="RH",
                                   line=dict(color="#0284c7", width=2)), row=2, col=1)
-        fig3.add_trace(go.Scatter(x=df_t["Time"], y=df_t["HI_F"],
+        fig3.add_trace(go.Scatter(x=df_t["Time"], y=df_t["HI_C"],
                                   mode="lines", name="HI",
                                   line=dict(color="#dc2626", width=2)), row=3, col=1)
-        for y, color in [(80,"#16a34a"),(91,"#ca8a04"),(103,"#ea580c"),(125,"#dc2626")]:
-            fig3.add_hline(y=y, line_dash="dot", line_color=color,
+        for y_f, color in [(80,"#16a34a"),(91,"#ca8a04"),(103,"#ea580c"),(125,"#dc2626")]:
+            fig3.add_hline(y=f_to_c(y_f), line_dash="dot", line_color=color,
                            line_width=1, row=3, col=1)
 
         _apply_theme(fig3, height=600, margin=dict(l=60, r=20, t=40, b=40))
@@ -892,8 +884,8 @@ with tab_trends:
         c1.metric("Min Temp", f"{df_t['Temperature'].min():.1f}°C")
         c2.metric("Max Temp", f"{df_t['Temperature'].max():.1f}°C")
         c3.metric("Avg Temp", f"{df_t['Temperature'].mean():.1f}°C")
-        c4.metric("Max HI",   f"{df_t['HI_F'].max():.1f}°F")
-        c5.metric("Avg HI",   f"{df_t['HI_F'].mean():.1f}°F")
+        c4.metric("Max HI",   f"{df_t['HI_C'].max():.1f}°C")
+        c5.metric("Avg HI",   f"{df_t['HI_C'].mean():.1f}°C")
 
     st.markdown("---")
     st.markdown("<div class='section-header'>Multi-Device Comparison — Heat Index Over Time</div>",
@@ -905,7 +897,7 @@ with tab_trends:
         if df is None or df.empty:
             continue
         fig4.add_trace(go.Scatter(
-            x=df["Time"], y=df["HI_F"],
+            x=df["Time"], y=df["HI_C"],
             mode="lines", name=info["name"],
             line=dict(color=palette[i % len(palette)], width=1.5),
         ))
@@ -913,7 +905,7 @@ with tab_trends:
                  showlegend=True,
                  legend=dict(bgcolor="#eff6ff", bordercolor="#93c5fd",
                              font=dict(color="#000000", size=11, family=_FONT)))
-    _style_axes(fig4, ytitle="Heat Index (°F)")
+    _style_axes(fig4, ytitle="Heat Index (°C)")
     st.plotly_chart(fig4, use_container_width=True)
 
 
@@ -924,42 +916,41 @@ with tab_hi:
     st.markdown("<div class='section-header'>NWS Heat Index Reference Chart</div>",
                 unsafe_allow_html=True)
 
-    rh_range   = list(range(40, 105, 5))
-    temp_range = list(range(80, 112, 2))
-    z_matrix   = []
-    for T in temp_range:
-        z_matrix.append([round(heat_index_fahrenheit(float(T), float(RH)), 1)
-                         for RH in rh_range])
+    rh_range     = list(range(40, 105, 5))
+    temp_f_range = list(range(80, 112, 2))
+    temp_c_range = [round(f_to_c(t), 1) for t in temp_f_range]
+    z_matrix     = [[round(f_to_c(heat_index_fahrenheit(float(T), float(RH))), 1)
+                     for RH in rh_range] for T in temp_f_range]
 
     fig5 = go.Figure(go.Heatmap(
         z=z_matrix,
         x=[f"{r}%" for r in rh_range],
-        y=[f"{t}°F ({(t-32)*5/9:.0f}°C)" for t in temp_range],
+        y=[f"{tc}°C" for tc in temp_c_range],
         colorscale=[[0,"#16a34a"],[0.25,"#ca8a04"],
                     [0.55,"#ea580c"],[0.75,"#dc2626"],[1.0,"#7f1d1d"]],
         text=[[str(v) for v in row] for row in z_matrix],
         texttemplate="%{text}",
         textfont=dict(size=9, family="Calibri, Segoe UI, Arial, sans-serif", color="#000000"),
-        hovertemplate="Temp: %{y}<br>RH: %{x}<br>HI: %{z}°F<extra></extra>",
+        hovertemplate="Temp: %{y}<br>RH: %{x}<br>HI: %{z}°C<extra></extra>",
         showscale=True,
         colorbar=dict(
-            title=dict(text="HI (°F)",
+            title=dict(text="HI (°C)",
                        font=dict(family="Calibri, Segoe UI, Arial, sans-serif", color="#000000")),
             tickfont=dict(family="Calibri, Segoe UI, Arial, sans-serif", color="#000000"),
         ),
     ))
     _apply_theme(fig5, height=550, margin=dict(l=20, r=20, t=20, b=40))
-    _style_axes(fig5, xtitle="Relative Humidity (%)", ytitle="Air Temperature")
+    _style_axes(fig5, xtitle="Relative Humidity (%)", ytitle="Air Temperature (°C)")
     st.plotly_chart(fig5, use_container_width=True)
 
     st.markdown("<div class='section-header'>Risk Levels</div>", unsafe_allow_html=True)
     col1, col2 = st.columns(2)
     categories = [
-        ("< 80°F",    "Normal",          "safe",    "No heat stress"),
-        ("80–90°F",   "Caution",         "caution", "Fatigue possible with prolonged exposure"),
-        ("91–102°F",  "Extreme Caution", "danger",  "Heat cramps / exhaustion possible"),
-        ("103–124°F", "Danger",          "extreme", "Heat cramps / exhaustion likely; stroke possible"),
-        ("≥ 125°F",   "Extreme Danger",  "extreme", "Heat stroke highly likely"),
+        ("< 27°C",  "Normal",          "safe",    "No heat stress"),
+        ("27–32°C", "Caution",         "caution", "Fatigue possible with prolonged exposure"),
+        ("33–39°C", "Extreme Caution", "danger",  "Heat cramps / exhaustion possible"),
+        ("40–51°C", "Danger",          "extreme", "Heat cramps / exhaustion likely; stroke possible"),
+        ("≥ 52°C",  "Extreme Danger",  "extreme", "Heat stroke highly likely"),
     ]
     for i, (rng, name, level, desc) in enumerate(categories):
         target = col1 if i % 2 == 0 else col2
@@ -972,15 +963,15 @@ with tab_hi:
               <div style='font-size:12px; color:#000000; margin-top:6px'>{desc}</div>
             </div>""", unsafe_allow_html=True)
 
-    st.info("💡 **Note:** Heat Index values are in °F (NWS standard). Sensor readings in °C "
-            "are converted via T(°F) = T(°C) × 9/5 + 32 before applying the Rothfusz regression.")
+    st.info("💡 **Note:** Heat Index is computed internally in °F per the NWS Rothfusz regression "
+            "(T in °F, RH in %) with low-RH and high-RH adjustments, then converted to °C for display.")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
 # TAB 5: DEVICES
 # ─────────────────────────────────────────────────────────────────────────────
 with tab_devices:
-    st.markdown("<div class='section-header'>Sensor Network — Prayagraj Dyeing &amp; Printing</div>",
+    st.markdown("<div class='section-header'>Sensor Network — Unit 1</div>",
                 unsafe_allow_html=True)
 
     cols = st.columns(3)
@@ -1020,7 +1011,7 @@ with tab_devices:
                     <div>
                       <div class='label'>HI</div>
                       <div style='font-family:Calibri,Segoe UI,Arial,sans-serif;font-size:16px;
-                                  color:#b91c1c;font-weight:600'>{hi_f:.1f}°F</div>
+                                  color:#b91c1c;font-weight:600'>{f_to_c(hi_f):.1f}°C</div>
                     </div>
                   </div>
                 </div>""", unsafe_allow_html=True)
@@ -1074,11 +1065,11 @@ with tab_about:
 
 ### About This Dashboard
 
-This real-time dashboard displays environmental sensor data from **Prayagraj Dyeing and Printing Private Limited**, one of four study units in the WRI occupational heat stress research.
+This real-time dashboard displays environmental sensor data from **Unit 1**, one of four study units in the WRI occupational heat stress research.
 
-Sensors are deployed at 15 locations across the facility — from stenter machines and jet dyeing areas to circulation zones and folding tables — capturing spatial and temporal variation in indoor heat conditions.
+Sensors are deployed across the facility — from stenter machines and jet dyeing areas to circulation zones and folding tables — capturing spatial and temporal variation in indoor heat conditions.
 
-**Heat Index** is computed using the **NWS Rothfusz regression** formula, applied after converting sensor temperatures from °C to °F:
+**Heat Index** is computed using the **NWS Rothfusz regression** formula (with low-RH and high-RH adjustments), applied after converting sensor temperatures from °C to °F, then converted back to °C for display:
 
         """)
         st.markdown("""
@@ -1092,7 +1083,7 @@ Sensors are deployed at 15 locations across the facility — from stenter machin
 </div>
 <p style='font-family:Calibri,Segoe UI,Arial,sans-serif; font-size:13px;
           color:#000000; margin:4px 0 12px 0;'>
-  where T = temperature in °F, RH = relative humidity in %.
+  where T = temperature in °F, RH = relative humidity in %. Result displayed in °C.
 </p>
         """, unsafe_allow_html=True)
         st.markdown("""
@@ -1127,11 +1118,11 @@ Monitoring period: 12 months (continuous) · Interval: Hourly readings
 
 | Heat Index | Category |
 |------------|----------|
-| < 80°F     | Normal   |
-| 80–90°F    | Caution  |
-| 91–102°F   | Extreme Caution |
-| 103–124°F  | Danger   |
-| ≥ 125°F    | Extreme Danger |
+| < 27°C     | Normal   |
+| 27–32°C    | Caution  |
+| 33–39°C    | Extreme Caution |
+| 40–51°C    | Danger   |
+| ≥ 52°C     | Extreme Danger |
 
 ---
 
