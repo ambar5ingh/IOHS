@@ -1,7 +1,7 @@
 """
 Indoor Occupational Heat Stress Dashboard
 Prayagraj Dyeing and Printing Private Limited — Surat
-WRI INDIA
+WRI India
 """
 
 import streamlit as st
@@ -17,7 +17,7 @@ import json
 
 # ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Heat Stress Monitor | Prayagraj Dyeing and Printing Private Limited",
+    page_title="Heat Stress Monitor | Prayagraj Dyeing and Printing Pvt. Ltd.",
     page_icon="🌡️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -33,8 +33,8 @@ st.markdown("""
     --surface: #f8f9fa;
     --surface2: #f1f3f5;
     --border: #dee2e6;
-    --text: #1a1d23;
-    --muted: #6b7280;
+    --text: #000000;
+    --muted: #000000;
     --accent: #e85d04;
     --accent2: #dc2626;
     --safe: #16a34a;
@@ -328,9 +328,9 @@ with st.sidebar:
 
     st.markdown("---")
     st.markdown("""
-    <div style='font-size:10px; color:#6b7280; font-family: IBM Plex Mono, monospace;'>
+    <div style='font-size:10px; color:#000000; font-family: IBM Plex Mono, monospace;'>
     DATA SOURCE<br>
-    <a href='https://opendata.oizom.com' style='color:#f97316'>opendata.oizom.com</a><br><br>
+    <a href='https://opendata.oizom.com' style='color:#e85d04'>opendata.oizom.com</a><br><br>
     REFERENCE<br>
     NWS Heat Index Chart<br>
     Rothfusz Regression<br><br>
@@ -378,20 +378,20 @@ st.markdown("""
   <div style='font-family: IBM Plex Mono, monospace; font-size: 11px;
               color: #f97316; letter-spacing: 2px; text-transform: uppercase;
               margin-bottom: 6px;'>
-    WRI Research · Indoor Occupational Heat Stress
+    WRI India · Indoor Occupational Heat Stress
   </div>
   <h1 style='margin:0; font-family: IBM Plex Sans, sans-serif; font-weight:700;
-             font-size:28px; color:#1a1d23; letter-spacing:-0.5px;'>
-    Prayagraj Dyeing & Printing — Live Sensor Dashboard
+             font-size:28px; color:#000000; letter-spacing:-0.5px;'>
+    Prayagraj Dyeing & Printing Pvt. Ltd. — Live Sensor Dashboard
   </h1>
-  <p style='margin:4px 0 0 0; color:#6b7280; font-size:13px;'>
-    Surat Textile MSME Cluster · 15 Sensor Nodes · Heat Index Analysis
+  <p style='margin:4px 0 0 0; color:#000000; font-size:13px;'>
+    Surat · 15 Sensor Nodes · Heat Index Analysis
   </p>
 </div>
 """, unsafe_allow_html=True)
 
 tab_overview, tab_heatmap, tab_trends, tab_hi, tab_devices, tab_about = st.tabs([
-    "📊 Overview", "🔥 Heat Map", "📈 Trends", "🌡️ Heat Index", "📡 Devices", "ℹ️ About"
+    "Overview", "Heat Map", "Trends", "Heat Index", "Devices", "About"
 ])
 
 
@@ -568,7 +568,7 @@ with tab_heatmap:
         fig.update_layout(
             paper_bgcolor="#ffffff",
             plot_bgcolor="#f8f9fa",
-            font=dict(family="IBM Plex Mono", color="#1a1d23"),
+            font=dict(family="IBM Plex Mono", color="#000000"),
             xaxis=dict(title="Heat Index (°F)", gridcolor="#dee2e6",
                        range=[min(hi_vals)-5, max(hi_vals)+25]),
             yaxis=dict(gridcolor="#dee2e6"),
@@ -603,7 +603,7 @@ with tab_heatmap:
         )
         fig2.update_layout(
             paper_bgcolor="#ffffff", plot_bgcolor="#f8f9fa",
-            font=dict(family="IBM Plex Mono", color="#1a1d23"),
+            font=dict(family="IBM Plex Mono", color="#000000"),
             xaxis=dict(gridcolor="#dee2e6"),
             yaxis=dict(gridcolor="#dee2e6"),
             margin=dict(l=0, r=0, t=20, b=40),
@@ -650,7 +650,7 @@ with tab_trends:
 
         fig3.update_layout(
             paper_bgcolor="#ffffff", plot_bgcolor="#f8f9fa",
-            font=dict(family="IBM Plex Mono", color="#1a1d23"),
+            font=dict(family="IBM Plex Mono", color="#000000"),
             xaxis3=dict(gridcolor="#dee2e6"),
             yaxis=dict(gridcolor="#dee2e6"),
             yaxis2=dict(gridcolor="#dee2e6"),
@@ -687,7 +687,7 @@ with tab_trends:
         ))
     fig4.update_layout(
         paper_bgcolor="#ffffff", plot_bgcolor="#f8f9fa",
-        font=dict(family="IBM Plex Mono", color="#1a1d23"),
+        font=dict(family="IBM Plex Mono", color="#000000"),
         xaxis=dict(gridcolor="#dee2e6"),
         yaxis=dict(gridcolor="#dee2e6", title="Heat Index (°F)"),
         legend=dict(bgcolor="#f8f9fa", bordercolor="#dee2e6", font_size=10),
@@ -731,13 +731,13 @@ with tab_hi:
         hovertemplate="Temp: %{y}<br>RH: %{x}<br>HI: %{z}°F<extra></extra>",
         showscale=True,
         colorbar=dict(
-            title=dict(text="HI (°F)", font=dict(family="IBM Plex Mono", color="#1a1d23")),
-            tickfont=dict(family="IBM Plex Mono", color="#1a1d23"),
+            title=dict(text="HI (°F)", font=dict(family="IBM Plex Mono", color="#000000")),
+            tickfont=dict(family="IBM Plex Mono", color="#000000"),
         ),
     ))
     fig5.update_layout(
         paper_bgcolor="#ffffff", plot_bgcolor="#ffffff",
-        font=dict(family="IBM Plex Mono", color="#1a1d23"),
+        font=dict(family="IBM Plex Mono", color="#000000"),
         margin=dict(l=0, r=0, t=20, b=40),
         xaxis=dict(title="Relative Humidity"),
         yaxis=dict(title="Air Temperature"),
@@ -761,8 +761,8 @@ with tab_hi:
             st.markdown(f"""
             <div class='metric-card' style='margin-bottom:8px'>
               <span class='badge badge-{level}'>{name}</span>
-              <span style='margin-left:8px; font-family:IBM Plex Mono; font-size:12px; color:#1a1d23'>{rng}</span>
-              <div style='font-size:12px; color:#9ca3af; margin-top:6px'>{desc}</div>
+              <span style='margin-left:8px; font-family:IBM Plex Mono; font-size:12px; color:#000000'>{rng}</span>
+              <div style='font-size:12px; color:#000000; margin-top:6px'>{desc}</div>
             </div>""", unsafe_allow_html=True)
 
     st.markdown("")
@@ -792,9 +792,9 @@ with tab_devices:
                   <div style='display:flex; justify-content:space-between; align-items:flex-start'>
                     <div>
                       <div class='label'>{did}</div>
-                      <div style='font-size:13px; font-weight:600; color:#1a1d23;
+                      <div style='font-size:13px; font-weight:600; color:#000000;
                                   margin:2px 0 4px 0'>{info['name']}</div>
-                      <span style='font-size:10px; color:#6b7280;
+                      <span style='font-size:10px; color:#000000;
                                    background:#e9ecef; padding:2px 6px;
                                    border-radius:3px'>{info['zone']}</span>
                     </div>
@@ -823,8 +823,8 @@ with tab_devices:
                 st.markdown(f"""
                 <div class='metric-card' style='opacity:0.5'>
                   <div class='label'>{did}</div>
-                  <div style='font-size:13px; color:#9ca3af'>{info['name']}</div>
-                  <div style='font-size:11px; color:#6b7280; margin-top:8px'>No data</div>
+                  <div style='font-size:13px; color:#000000'>{info['name']}</div>
+                  <div style='font-size:11px; color:#000000; margin-top:8px'>No data</div>
                 </div>""", unsafe_allow_html=True)
 
     st.markdown("---")
@@ -941,7 +941,7 @@ Data: [opendata.oizom.com](https://opendata.oizom.com)
 
     st.markdown("---")
     st.markdown("""
-    <div style='font-family: IBM Plex Mono, monospace; font-size: 10px; color: #6b7280; text-align:center'>
+    <div style='font-family: IBM Plex Mono, monospace; font-size: 10px; color: #000000; text-align:center'>
     © World Resources Institute · Dashboard built for research purposes only ·
     Data: Oizom OpenData API · Heat Index: NWS Rothfusz Regression
     </div>
