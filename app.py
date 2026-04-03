@@ -1,7 +1,6 @@
 """
 Indoor Occupational Heat Stress Dashboard
 Unit 1 — Surat
-WRI India
 """
 
 import streamlit as st
@@ -468,7 +467,7 @@ with st.sidebar:
     st.markdown("""
     <div style='padding:16px 0 8px 0'>
       <div class='main-title'>Indoor Occupational Heat Stress</div>
-      <div class='main-subtitle'>Unit 1<br>Surat · WRI India</div>
+      <div class='main-subtitle'>Unit 1<br>Surat</div>
     </div>
     """, unsafe_allow_html=True)
     st.markdown("---")
@@ -594,7 +593,7 @@ st.markdown("""
 <div style='padding:14px 22px 20px 22px; background:#bfdbfe; border-radius:12px; margin-bottom:16px; border:1px solid #93c5fd;'>
   <div style='font-family:Calibri,Segoe UI,Arial,sans-serif; font-size:12px; color:#c2410c;
               letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; font-weight:700;'>
-    WRI India · Indoor Occupational Heat Stress
+    Indoor Occupational Heat Stress
   </div>
   <h1 style='margin:0; font-family:Calibri,Segoe UI,Arial,sans-serif; font-weight:700;
              font-size:26px; color:#000000; letter-spacing:-0.3px;'>
@@ -1102,7 +1101,7 @@ Sensors are deployed across the facility — from stenter machines and jet dyein
 ### Authors
 
 Pooja Yadav · Mehul Patel · Abhijit Namboothiri · Ambar Singh
-*World Resources Institute India*
+*WRI India*
 
 ---
 
