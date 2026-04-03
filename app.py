@@ -1,7 +1,7 @@
 """
 Indoor Occupational Heat Stress Dashboard
-Prayagraj Dyeing and Printing Private Limited — Surat
-WRI INDIA Research
+Prayagraj Dyeing and Printing Private Limited — Surat Textile MSME Study
+WRI Research Project
 """
 
 import streamlit as st
@@ -17,7 +17,7 @@ import json
 
 # ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Heat Stress Monitor",
+    page_title="Heat Stress Monitor | Prayagraj Dyeing",
     page_icon="🌡️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -731,9 +731,8 @@ with tab_hi:
         hovertemplate="Temp: %{y}<br>RH: %{x}<br>HI: %{z}°F<extra></extra>",
         showscale=True,
         colorbar=dict(
-            title="HI (°F)",
+            title=dict(text="HI (°F)", font=dict(family="IBM Plex Mono", color="#e8eaf0")),
             tickfont=dict(family="IBM Plex Mono", color="#e8eaf0"),
-            titlefont=dict(family="IBM Plex Mono", color="#e8eaf0"),
         ),
     ))
     fig5.update_layout(
