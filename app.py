@@ -456,7 +456,7 @@ with st.sidebar:
     st.markdown("""
     <div style='padding:16px 0 8px 0'>
       <div class='main-title'>Indoor Occupational Heat Stress</div>
-      <div class='main-subtitle'>amp; Unit 1<br>Surat · WRI India</div>
+      <div class='main-subtitle'>Unit 1<br>Surat · WRI India</div>
     </div>
     """, unsafe_allow_html=True)
     st.markdown("---")
@@ -594,7 +594,7 @@ st.markdown("""
   </div>
   <h1 style='margin:0; font-family:Calibri,Segoe UI,Arial,sans-serif; font-weight:700;
              font-size:26px; color:#000000; letter-spacing:-0.3px;'>
-    Unitamp; 1 — Live Sensor Dashboard
+    Unit 1 — Live Sensor Dashboard
   </h1>
   <p style='margin:6px 0 0 0; color:#000000; font-size:13px; font-weight:500; font-family:Calibri,Segoe UI,Arial,sans-serif;'>
     Surat · Heat Index Analysis
