@@ -1,6 +1,6 @@
 """
 Indoor Occupational Heat Stress Dashboard
-Prayagraj Dyeing and Printing Private Limited — Surat Textile MSME Study
+Prayagraj Dyeing and Printing Private Limited — Surat
 WRI INDIA
 """
 
@@ -17,7 +17,7 @@ import json
 
 # ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Heat Stress Monitor | Prayagraj Dyeing",
+    page_title="Heat Stress Monitor | Prayagraj Dyeing and Printing Private Limited",
     page_icon="🌡️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -29,18 +29,18 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap');
 
 :root {
-    --bg: #0d0f14;
-    --surface: #161a22;
-    --surface2: #1e2430;
-    --border: #2a3040;
-    --text: #e8eaf0;
+    --bg: #ffffff;
+    --surface: #f8f9fa;
+    --surface2: #f1f3f5;
+    --border: #dee2e6;
+    --text: #1a1d23;
     --muted: #6b7280;
-    --accent: #f97316;
-    --accent2: #ef4444;
-    --safe: #22c55e;
-    --warn: #eab308;
-    --danger: #f97316;
-    --extreme: #ef4444;
+    --accent: #e85d04;
+    --accent2: #dc2626;
+    --safe: #16a34a;
+    --warn: #ca8a04;
+    --danger: #e85d04;
+    --extreme: #dc2626;
     --mono: 'IBM Plex Mono', monospace;
     --sans: 'IBM Plex Sans', sans-serif;
 }
@@ -298,8 +298,8 @@ def load_sample_data() -> dict[str, pd.DataFrame]:
 with st.sidebar:
     st.markdown("""
     <div style='padding:16px 0 8px 0'>
-      <div class='main-title'> Indoor Occupational Heat Stress</div>
-      <div class='main-subtitle'>Prayagraj Dyeing & Printing Private Limited<br>Surat · WRI India</div>
+      <div class='main-title'>Indoor Occupational Heat Stress</div>
+      <div class='main-subtitle'>Prayagraj Dyeing & Printing Pvt. Ltd.<br>Surat · WRI India</div>
     </div>
     """, unsafe_allow_html=True)
     st.markdown("---")
@@ -381,7 +381,7 @@ st.markdown("""
     WRI Research · Indoor Occupational Heat Stress
   </div>
   <h1 style='margin:0; font-family: IBM Plex Sans, sans-serif; font-weight:700;
-             font-size:28px; color:#e8eaf0; letter-spacing:-0.5px;'>
+             font-size:28px; color:#1a1d23; letter-spacing:-0.5px;'>
     Prayagraj Dyeing & Printing — Live Sensor Dashboard
   </h1>
   <p style='margin:4px 0 0 0; color:#6b7280; font-size:13px;'>
@@ -566,12 +566,12 @@ with tab_heatmap:
                           annotation_font_size=10)
 
         fig.update_layout(
-            paper_bgcolor="#0d0f14",
-            plot_bgcolor="#161a22",
-            font=dict(family="IBM Plex Mono", color="#e8eaf0"),
-            xaxis=dict(title="Heat Index (°F)", gridcolor="#2a3040",
+            paper_bgcolor="#ffffff",
+            plot_bgcolor="#f8f9fa",
+            font=dict(family="IBM Plex Mono", color="#1a1d23"),
+            xaxis=dict(title="Heat Index (°F)", gridcolor="#dee2e6",
                        range=[min(hi_vals)-5, max(hi_vals)+25]),
-            yaxis=dict(gridcolor="#2a3040"),
+            yaxis=dict(gridcolor="#dee2e6"),
             margin=dict(l=0, r=60, t=20, b=40),
             height=500,
         )
@@ -602,10 +602,10 @@ with tab_heatmap:
             labels={"Temperature": "Temp (°C)", "Humidity": "RH (%)", "HI_F": "HI (°F)"},
         )
         fig2.update_layout(
-            paper_bgcolor="#0d0f14", plot_bgcolor="#161a22",
-            font=dict(family="IBM Plex Mono", color="#e8eaf0"),
-            xaxis=dict(gridcolor="#2a3040"),
-            yaxis=dict(gridcolor="#2a3040"),
+            paper_bgcolor="#ffffff", plot_bgcolor="#f8f9fa",
+            font=dict(family="IBM Plex Mono", color="#1a1d23"),
+            xaxis=dict(gridcolor="#dee2e6"),
+            yaxis=dict(gridcolor="#dee2e6"),
             margin=dict(l=0, r=0, t=20, b=40),
             height=400,
         )
@@ -649,13 +649,13 @@ with tab_trends:
                            line_width=1, row=3, col=1)
 
         fig3.update_layout(
-            paper_bgcolor="#0d0f14", plot_bgcolor="#161a22",
-            font=dict(family="IBM Plex Mono", color="#e8eaf0"),
-            xaxis3=dict(gridcolor="#2a3040"),
-            yaxis=dict(gridcolor="#2a3040"),
-            yaxis2=dict(gridcolor="#2a3040"),
-            yaxis3=dict(gridcolor="#2a3040"),
-            legend=dict(bgcolor="#161a22", bordercolor="#2a3040"),
+            paper_bgcolor="#ffffff", plot_bgcolor="#f8f9fa",
+            font=dict(family="IBM Plex Mono", color="#1a1d23"),
+            xaxis3=dict(gridcolor="#dee2e6"),
+            yaxis=dict(gridcolor="#dee2e6"),
+            yaxis2=dict(gridcolor="#dee2e6"),
+            yaxis3=dict(gridcolor="#dee2e6"),
+            legend=dict(bgcolor="#f8f9fa", bordercolor="#dee2e6"),
             margin=dict(l=0, r=0, t=40, b=40),
             height=600,
             showlegend=False,
@@ -686,11 +686,11 @@ with tab_trends:
             line=dict(color=palette[i % len(palette)], width=1.2),
         ))
     fig4.update_layout(
-        paper_bgcolor="#0d0f14", plot_bgcolor="#161a22",
-        font=dict(family="IBM Plex Mono", color="#e8eaf0"),
-        xaxis=dict(gridcolor="#2a3040"),
-        yaxis=dict(gridcolor="#2a3040", title="Heat Index (°F)"),
-        legend=dict(bgcolor="#161a22", bordercolor="#2a3040", font_size=10),
+        paper_bgcolor="#ffffff", plot_bgcolor="#f8f9fa",
+        font=dict(family="IBM Plex Mono", color="#1a1d23"),
+        xaxis=dict(gridcolor="#dee2e6"),
+        yaxis=dict(gridcolor="#dee2e6", title="Heat Index (°F)"),
+        legend=dict(bgcolor="#f8f9fa", bordercolor="#dee2e6", font_size=10),
         margin=dict(l=0, r=0, t=20, b=40),
         height=400,
     )
@@ -731,13 +731,13 @@ with tab_hi:
         hovertemplate="Temp: %{y}<br>RH: %{x}<br>HI: %{z}°F<extra></extra>",
         showscale=True,
         colorbar=dict(
-            title=dict(text="HI (°F)", font=dict(family="IBM Plex Mono", color="#e8eaf0")),
-            tickfont=dict(family="IBM Plex Mono", color="#e8eaf0"),
+            title=dict(text="HI (°F)", font=dict(family="IBM Plex Mono", color="#1a1d23")),
+            tickfont=dict(family="IBM Plex Mono", color="#1a1d23"),
         ),
     ))
     fig5.update_layout(
-        paper_bgcolor="#0d0f14", plot_bgcolor="#0d0f14",
-        font=dict(family="IBM Plex Mono", color="#e8eaf0"),
+        paper_bgcolor="#ffffff", plot_bgcolor="#ffffff",
+        font=dict(family="IBM Plex Mono", color="#1a1d23"),
         margin=dict(l=0, r=0, t=20, b=40),
         xaxis=dict(title="Relative Humidity"),
         yaxis=dict(title="Air Temperature"),
@@ -761,7 +761,7 @@ with tab_hi:
             st.markdown(f"""
             <div class='metric-card' style='margin-bottom:8px'>
               <span class='badge badge-{level}'>{name}</span>
-              <span style='margin-left:8px; font-family:IBM Plex Mono; font-size:12px; color:#e8eaf0'>{rng}</span>
+              <span style='margin-left:8px; font-family:IBM Plex Mono; font-size:12px; color:#1a1d23'>{rng}</span>
               <div style='font-size:12px; color:#9ca3af; margin-top:6px'>{desc}</div>
             </div>""", unsafe_allow_html=True)
 
@@ -792,10 +792,10 @@ with tab_devices:
                   <div style='display:flex; justify-content:space-between; align-items:flex-start'>
                     <div>
                       <div class='label'>{did}</div>
-                      <div style='font-size:13px; font-weight:600; color:#e8eaf0;
+                      <div style='font-size:13px; font-weight:600; color:#1a1d23;
                                   margin:2px 0 4px 0'>{info['name']}</div>
                       <span style='font-size:10px; color:#6b7280;
-                                   background:#1e2430; padding:2px 6px;
+                                   background:#e9ecef; padding:2px 6px;
                                    border-radius:3px'>{info['zone']}</span>
                     </div>
                     <span class='badge badge-{lev}'>{cat}</span>
