@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 import time
 
 st.set_page_config(
-    page_title="Heat Stress Monitor",
+    page_title="Heat Stress Monitor | Prayagraj Dyeing and Printing Pvt. Ltd.",
     page_icon="🌡️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -395,15 +395,69 @@ with st.sidebar:
 
     auto_refresh = st.toggle("⟳ Auto-refresh (5 min)", value=False)
 
-    time_range = st.selectbox(
-        "Time window",
-        ["Last 6 hours", "Last 24 hours", "Last 48 hours", "Last 7 days"],
-        index=1,
-    )
-    hours_map = {"Last 6 hours": 6, "Last 24 hours": 24,
-                 "Last 48 hours": 48, "Last 7 days": 168,
-                "Last 30 days": 720}
-    selected_hours = hours_map[time_range]
+    st.markdown("<div style='font-size:12px;font-weight:700;color:#000000;text-transform:uppercase;"
+                "letter-spacing:1px;margin:8px 0 4px 0;'>Time Window</div>", unsafe_allow_html=True)
+
+    # Quick preset buttons
+    preset_cols = st.columns(4)
+    presets = [("6h", 6), ("24h", 24), ("48h", 48), ("7d", 168)]
+    if "selected_hours" not in st.session_state:
+        st.session_state.selected_hours = 24
+    if "use_custom_dates" not in st.session_state:
+        st.session_state.use_custom_dates = False
+
+    for col, (label, hrs) in zip(preset_cols, presets):
+        with col:
+            is_active = (not st.session_state.use_custom_dates
+                         and st.session_state.selected_hours == hrs)
+            btn_style = ("background:#2563eb;color:#fff;" if is_active
+                         else "background:#eff6ff;color:#000;")
+            if st.button(label, key=f"preset_{hrs}",
+                         use_container_width=True):
+                st.session_state.selected_hours  = hrs
+                st.session_state.use_custom_dates = False
+
+    # Custom date range calendar
+    st.markdown("<div style='font-size:11px;font-weight:600;color:#000000;"
+                "margin:10px 0 2px 0;'>Custom date range</div>", unsafe_allow_html=True)
+    today     = datetime.utcnow().date()
+    min_date  = today - timedelta(days=365)
+
+    date_from = st.date_input("From", value=today - timedelta(days=1),
+                               min_value=min_date, max_value=today, key="date_from",
+                               label_visibility="collapsed")
+    date_to   = st.date_input("To",   value=today,
+                               min_value=min_date, max_value=today, key="date_to",
+                               label_visibility="collapsed")
+
+    if st.button("Apply date range", use_container_width=True, key="apply_dates"):
+        if date_from <= date_to:
+            delta_hours = int((datetime.combine(date_to,   datetime.max.time()) -
+                               datetime.combine(date_from, datetime.min.time())
+                               ).total_seconds() / 3600)
+            st.session_state.selected_hours   = max(1, delta_hours)
+            st.session_state.use_custom_dates = True
+        else:
+            st.error("'From' date must be before 'To' date.")
+
+    # Display active window info
+    if st.session_state.use_custom_dates:
+        st.markdown(f"<div style='font-size:11px;color:#1d4ed8;font-weight:600;"
+                    f"background:#eff6ff;border:1px solid #93c5fd;border-radius:6px;"
+                    f"padding:5px 8px;margin-top:6px;'>"
+                    f"📅 {date_from.strftime('%d %b')} → {date_to.strftime('%d %b %Y')}"
+                    f"</div>", unsafe_allow_html=True)
+    else:
+        label_map = {6:"Last 6 hours", 24:"Last 24 hours",
+                     48:"Last 48 hours", 168:"Last 7 days"}
+        lbl = label_map.get(st.session_state.selected_hours,
+                             f"Last {st.session_state.selected_hours}h")
+        st.markdown(f"<div style='font-size:11px;color:#1d4ed8;font-weight:600;"
+                    f"background:#eff6ff;border:1px solid #93c5fd;border-radius:6px;"
+                    f"padding:5px 8px;margin-top:6px;'>🕐 {lbl}</div>",
+                    unsafe_allow_html=True)
+
+    selected_hours = st.session_state.selected_hours
 
     st.markdown("#### Devices")
     all_checked = st.checkbox("Select all", value=True)
@@ -469,7 +523,7 @@ st.markdown("""
     Prayagraj Dyeing &amp; Printing Pvt. Ltd. — Live Sensor Dashboard
   </h1>
   <p style='margin:6px 0 0 0; color:#000000; font-size:13px; font-weight:500; font-family:Calibri,Segoe UI,Arial,sans-serif;'>
-    Surat · Heat Index Analysis
+    Surat · 15 Sensor Nodes · Heat Index Analysis
   </p>
 </div>
 """, unsafe_allow_html=True)
@@ -647,8 +701,8 @@ with tab_heatmap:
                           annotation_font_color="#000000",
                           annotation_font_size=10)
 
+        fig.update_layout(PLOTLY_LAYOUT)
         fig.update_layout(
-            **PLOTLY_LAYOUT,
             xaxis=dict(
                 title="Heat Index (°F)", gridcolor="#bfdbfe", color="#000000",
                 tickfont=dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif", size=12),
@@ -686,8 +740,8 @@ with tab_heatmap:
             labels={"Temperature":"Temp (°C)","Humidity":"RH (%)","HI_F":"HI (°F)"},
         )
         _tf = dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif", size=12)
+        fig2.update_layout(PLOTLY_LAYOUT)
         fig2.update_layout(
-            **PLOTLY_LAYOUT,
             xaxis=dict(gridcolor="#bfdbfe", color="#000000", tickfont=_tf),
             yaxis=dict(gridcolor="#bfdbfe", color="#000000", tickfont=_tf),
             coloraxis_colorbar=dict(tickfont=_tf, title=dict(font=_tf)),
@@ -732,8 +786,8 @@ with tab_trends:
 
         _tf = dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif", size=12)
         axis_style = dict(gridcolor="#bfdbfe", color="#000000", linecolor="#000000", tickfont=_tf)
+        fig3.update_layout(PLOTLY_LAYOUT)
         fig3.update_layout(
-            **PLOTLY_LAYOUT,
             xaxis3=axis_style, yaxis=axis_style, yaxis2=axis_style, yaxis3=axis_style,
             legend=dict(bgcolor="#eff6ff", bordercolor="#93c5fd", font=dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif")),
             margin=dict(l=60, r=0, t=40, b=40),
@@ -767,8 +821,8 @@ with tab_trends:
             line=dict(color=palette[i % len(palette)], width=1.5),
         ))
     _tf = dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif", size=12)
+    fig4.update_layout(PLOTLY_LAYOUT)
     fig4.update_layout(
-        **PLOTLY_LAYOUT,
         xaxis=dict(gridcolor="#bfdbfe", color="#000000", tickfont=_tf),
         yaxis=dict(gridcolor="#bfdbfe", color="#000000", title="Heat Index (°F)",
                    tickfont=_tf, titlefont=dict(color="#000000", family="Calibri, Segoe UI, Arial, sans-serif")),
