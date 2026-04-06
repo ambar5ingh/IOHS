@@ -71,35 +71,26 @@ button[aria-label="Open sidebar"] svg {
     stroke: #ffffff !important;
 }
 
-/* ── Hide "Key double" tooltip/text on sidebar collapse button ── */
+/* ── Hide "Key double" tooltip text — keep button visible ── */
 svg title, svg desc {
     display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    font-size: 0 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
 }
-[role="tooltip"],
-div[data-placement],
-div[data-popper-placement] {
-    display: none !important;
+/* Only hide tooltip popups, not the button itself */
+[role="tooltip"] {
     visibility: hidden !important;
     opacity: 0 !important;
     pointer-events: none !important;
 }
-button[data-testid="baseButton-headerNoPadding"] > span,
-button[kind="headerNoPadding"] > span,
-[data-testid="collapsedControl"] > span,
-[data-testid="stSidebarNavCollapseButton"] > span,
-[data-testid="stSidebarCollapsedControl"] > span {
-    display: none !important;
+/* Hide text spans inside collapse buttons but NOT the button or its SVG */
+[data-testid="collapsedControl"] > span:not(:has(svg)),
+[data-testid="stSidebarNavCollapseButton"] > span:not(:has(svg)),
+button[data-testid="baseButton-headerNoPadding"] > span:not(:has(svg)) {
     font-size: 0 !important;
     color: transparent !important;
     width: 0 !important;
-    height: 0 !important;
+    max-width: 0 !important;
     overflow: hidden !important;
+    display: inline-block !important;
 }
 
 [data-testid="stSidebar"] .stButton > button {
