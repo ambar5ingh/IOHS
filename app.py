@@ -47,26 +47,22 @@ html, body, [class*="css"], .stApp {
     font-family: var(--font) !important;
 }
 
-/* ── Sidebar collapse button — blue circle ── */
-[data-testid="collapsedControl"],
-[data-testid="stSidebarCollapsedControl"],
-button[aria-label="Collapse sidebar"],
-button[aria-label="Expand sidebar"],
-button[aria-label="Close sidebar"],
-button[aria-label="Open sidebar"] {
+/* ── Sidebar collapse/expand button — style but never hide ── */
+[data-testid="collapsedControl"] {
     background-color: #1d4ed8 !important;
     border: 2px solid #1e40af !important;
     border-radius: 50% !important;
     box-shadow: 0 2px 8px rgba(37,99,235,0.5) !important;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
-[data-testid="collapsedControl"] svg,
-button[aria-label="Collapse sidebar"] svg,
-button[aria-label="Expand sidebar"] svg,
-button[aria-label="Close sidebar"] svg,
-button[aria-label="Open sidebar"] svg {
+[data-testid="collapsedControl"] svg {
     fill: #ffffff !important;
-    color: #ffffff !important;
     stroke: #ffffff !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 svg title, svg desc { display: none !important; }
 
@@ -668,34 +664,41 @@ with tab_heatmap:
 
         fig = go.Figure()
         for i in range(len(names)):
+            # Place label inside bar if tall enough, otherwise just above
+            val = hi_c_vals[i]
+            txt_pos = "inside" if val > f_to_c(86) else "outside"
+            txt_color = "#000000" if txt_pos == "outside" else "#000000"
             fig.add_trace(go.Bar(
-                x=[names[i]], y=[hi_c_vals[i]],
+                x=[names[i]], y=[val],
                 marker_color=bar_colors[i],
                 marker_line_color="#888888",
                 marker_line_width=0.8,
-                # ── Change 2: label on each bar showing value + category ──
-                text=f"{hi_c_vals[i]:.1f}°C<br>{cats[i]}",
-                textposition="outside",
-                textfont=dict(color="#000000", size=10, family=_FONT),
-                hovertemplate=f"<b>{names[i]}</b><br>Heat Index: {hi_c_vals[i]:.1f}°C"
+                # ── Only °C value, no category text ──
+                text=f"{val:.1f}°C",
+                textposition=txt_pos,
+                textfont=dict(color=txt_color, size=11, family=_FONT),
+                hovertemplate=f"<b>{names[i]}</b><br>Heat Index: {val:.1f}°C"
                               f"<br>Category: {cats[i]}<extra></extra>",
                 name=cats[i], showlegend=False,
             ))
 
-        # NWS threshold lines (in °C)
+        # NWS threshold lines — annotation on LEFT to avoid clashing with legend
         threshold_lines = [
-            (f_to_c(80),  "Caution",         "#ffff00"),
-            (f_to_c(91),  "Extreme Caution", "#ffa500"),
-            (f_to_c(103), "Danger",           "#ff6600"),
-            (f_to_c(125), "Extreme Danger",   "#ff0000"),
+            (f_to_c(80),  "Caution (27°C)",         "#ca8a04"),
+            (f_to_c(91),  "Extreme Caution (33°C)", "#ea580c"),
+            (f_to_c(103), "Danger (39°C)",           "#dc2626"),
+            (f_to_c(125), "Extreme Danger (52°C)",   "#991b1b"),
         ]
         for y_c, lbl, color in threshold_lines:
             fig.add_hline(y=y_c, line_dash="dot", line_color=color,
                           line_width=1.5,
-                          annotation_text=f"  {lbl} ({y_c:.0f}°C)",
-                          annotation_font_color="#000000",
+                          annotation_text=lbl,
+                          annotation_font_color=color,
                           annotation_font_size=10,
-                          annotation_position="right")
+                          annotation_font_family=_FONT,
+                          annotation_position="top left",
+                          annotation_bgcolor="rgba(255,255,255,0.7)",
+                          annotation_borderpad=3)
 
         # ── Change 1: Legend patch matching image colours ──
         for cat_name, bg, txt in [
