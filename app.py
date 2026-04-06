@@ -31,7 +31,6 @@ st.markdown("""
     --font: 'Calibri', 'Segoe UI', Arial, sans-serif;
 }
 
-/* ── Global base ── */
 html, body, [class*="css"], .stApp {
     font-family: var(--font) !important;
     background-color: var(--bg) !important;
@@ -39,7 +38,6 @@ html, body, [class*="css"], .stApp {
 }
 .stApp { background-color: var(--bg) !important; }
 
-/* ── Sidebar ── */
 [data-testid="stSidebar"] {
     background-color: var(--surface) !important;
     border-right: 2px solid var(--border) !important;
@@ -48,12 +46,9 @@ html, body, [class*="css"], .stApp {
     color: #000000 !important;
     font-family: var(--font) !important;
 }
-/* ── Sidebar collapse/expand button ── */
+
 [data-testid="collapsedControl"],
 [data-testid="stSidebarCollapsedControl"],
-[data-testid="stSidebarNavCollapseButton"],
-button[kind="headerNoPadding"],
-button[data-testid="baseButton-headerNoPadding"],
 button[aria-label="Collapse sidebar"],
 button[aria-label="Expand sidebar"],
 button[aria-label="Close sidebar"],
@@ -65,39 +60,17 @@ button[aria-label="Open sidebar"] {
     opacity: 1 !important;
     visibility: visible !important;
     box-shadow: 0 2px 8px rgba(37,99,235,0.5) !important;
-    font-size: 0 !important;
-    overflow: hidden !important;
-}
-[data-testid="collapsedControl"] span,
-[data-testid="stSidebarCollapsedControl"] span,
-button[aria-label="Collapse sidebar"] span,
-button[aria-label="Expand sidebar"] span,
-button[aria-label="Close sidebar"] span,
-button[aria-label="Open sidebar"] span,
-button[kind="headerNoPadding"] span,
-button[data-testid="baseButton-headerNoPadding"] span {
-    display: none !important;
-    font-size: 0 !important;
-    width: 0 !important;
-    overflow: hidden !important;
 }
 [data-testid="collapsedControl"] svg,
-[data-testid="stSidebarCollapsedControl"] svg,
 button[aria-label="Collapse sidebar"] svg,
 button[aria-label="Expand sidebar"] svg,
 button[aria-label="Close sidebar"] svg,
-button[aria-label="Open sidebar"] svg,
-button[kind="headerNoPadding"] svg,
-button[data-testid="baseButton-headerNoPadding"] svg {
+button[aria-label="Open sidebar"] svg {
     fill: #ffffff !important;
     color: #ffffff !important;
     stroke: #ffffff !important;
-    opacity: 1 !important;
-    width: 20px !important;
-    height: 20px !important;
 }
 
-/* ── Sidebar inner buttons ── */
 [data-testid="stSidebar"] .stButton > button {
     background-color: #eff6ff !important;
     color: #000000 !important;
@@ -109,164 +82,86 @@ button[data-testid="baseButton-headerNoPadding"] svg {
 }
 [data-testid="stSidebar"] .stButton > button:hover {
     background-color: #bfdbfe !important;
-    color: #000000 !important;
 }
 
-/* ── Force all text black ── */
 p, span, div, li, label, h1, h2, h3, h4, h5, h6,
 .stMarkdown, .stText {
     color: #000000 !important;
     font-family: var(--font) !important;
 }
 
-/* ── Date input ── */
-[data-testid="stDateInput"] input,
-[data-testid="stDateInput"] div,
-[data-testid="stDateInput"] span,
-input[type="text"],
-.stDateInput input {
+[data-testid="stDateInput"] input, input[type="text"] {
     background-color: #ffffff !important;
     color: #000000 !important;
-    font-family: var(--font) !important;
     border: 1px solid #93c5fd !important;
     border-radius: 6px !important;
 }
-[data-testid="stDateInput"] label,
-[data-testid="stDateInput"] p {
-    color: #000000 !important;
-    font-family: var(--font) !important;
-    font-weight: 600 !important;
-}
-[data-baseweb="calendar"],
-[data-baseweb="datepicker"],
+[data-baseweb="calendar"], [data-baseweb="datepicker"],
 [data-baseweb="calendar"] * {
     background-color: #ffffff !important;
     color: #000000 !important;
-    font-family: var(--font) !important;
-}
-[data-baseweb="calendar"] button {
-    color: #000000 !important;
-    background-color: #ffffff !important;
-}
-[data-baseweb="calendar"] button:hover {
-    background-color: #dbeafe !important;
 }
 [data-baseweb="calendar"] [aria-selected="true"] {
     background-color: #2563eb !important;
     color: #ffffff !important;
 }
 
-/* ── Toggle ── */
-[data-testid="stToggle"] label,
-[data-testid="stToggle"] span,
-[data-testid="stToggle"] p {
-    color: #000000 !important;
-    font-family: var(--font) !important;
-    font-weight: 600 !important;
-}
-
-/* ── Checkboxes ── */
-[data-testid="stCheckbox"] label,
-[data-testid="stCheckbox"] span,
-[data-testid="stCheckbox"] p {
+[data-testid="stToggle"] label, [data-testid="stToggle"] span,
+[data-testid="stCheckbox"] label, [data-testid="stCheckbox"] span {
     color: #000000 !important;
     font-family: var(--font) !important;
 }
 
-/* ── Selectbox ── */
-[data-baseweb="select"],
-[data-baseweb="select"] > div,
-[data-baseweb="select"] > div > div {
+[data-baseweb="select"], [data-baseweb="select"] > div {
     background-color: #ffffff !important;
     color: #000000 !important;
-    font-family: var(--font) !important;
     border-color: #93c5fd !important;
 }
-[data-baseweb="select"] span,
-[data-baseweb="select"] [class*="singleValue"],
-[data-baseweb="select"] [class*="ValueContainer"] span {
+[data-baseweb="select"] span, [data-baseweb="select"] [class*="singleValue"] {
     color: #000000 !important;
-    font-family: var(--font) !important;
 }
-[data-baseweb="select"] svg { color: #000000 !important; fill: #000000 !important; }
+[data-baseweb="select"] svg { fill: #000000 !important; }
 [data-baseweb="popover"], [data-baseweb="menu"], [role="listbox"] {
     background-color: #ffffff !important;
     border: 1px solid #93c5fd !important;
 }
-[role="option"], li[role="option"] {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-    font-family: var(--font) !important;
-}
+[role="option"] { background-color: #ffffff !important; color: #000000 !important; }
 [role="option"]:hover { background-color: #dbeafe !important; }
 
-/* ── Widget labels ── */
-.stSelectbox label, .stMultiSelect label,
-.stCheckbox label, .stToggle label, .stRadio label,
-[data-testid="stWidgetLabel"],
-[data-testid="stWidgetLabel"] p {
-    font-family: var(--font) !important;
+.stSelectbox label, .stCheckbox label, .stToggle label,
+[data-testid="stWidgetLabel"], [data-testid="stWidgetLabel"] p {
     color: #000000 !important;
     font-weight: 600 !important;
 }
 
-/* ── Code blocks ── */
-code, pre, .stMarkdown code, .stMarkdown pre,
-div[class*="stCodeBlock"] {
-    background-color: #dbeafe !important;
-    color: #000000 !important;
-    border: 1px solid #93c5fd !important;
-    font-family: var(--font) !important;
-    border-radius: 6px !important;
-}
+code, pre { background-color: #dbeafe !important; color: #000000 !important; border: 1px solid #93c5fd !important; }
 
-/* ── Tabs ── */
 .stTabs [data-baseweb="tab"] {
     font-family: var(--font) !important;
     font-weight: 600 !important;
     color: #000000 !important;
     font-size: 12px !important;
-    padding: 8px 10px !important;
-    min-width: 0 !important;
-    white-space: nowrap !important;
 }
 
-/* ── Plotly SVG text ── */
-.js-plotly-plot .plotly text,
-.js-plotly-plot .plotly .ytick text,
-.js-plotly-plot .plotly .xtick text,
-.js-plotly-plot .plotly .g-gtitle text,
-.js-plotly-plot .plotly .annotation text {
-    fill: #000000 !important;
-    font-family: var(--font) !important;
-}
+.js-plotly-plot .plotly text { fill: #000000 !important; font-family: var(--font) !important; }
 .js-plotly-plot { border-radius: 8px; }
 
-/* ── Metrics ── */
-[data-testid="stMetricValue"],
-[data-testid="stMetricLabel"],
-[data-testid="stMetricDelta"] {
+[data-testid="stMetricValue"], [data-testid="stMetricLabel"] {
     color: #000000 !important;
-    font-family: var(--font) !important;
 }
 
-/* ── Download button ── */
 .stDownloadButton button {
     background-color: #2563eb !important;
     color: #ffffff !important;
-    font-family: var(--font) !important;
     font-weight: 600 !important;
     border-radius: 6px !important;
     border: none !important;
 }
-.stDownloadButton button:hover { background-color: #1d4ed8 !important; }
 
-/* ── Misc ── */
 hr { border-color: var(--border) !important; }
 #MainMenu, footer, header { visibility: hidden; }
 .stDataFrame { border: 1px solid var(--border); border-radius: 8px; }
 
-/* ── Metric cards ── */
 .metric-card {
     background: var(--surface2);
     border: 1px solid var(--border);
@@ -277,75 +172,59 @@ hr { border-color: var(--border) !important; }
     box-shadow: 0 2px 6px rgba(59,130,246,0.10);
 }
 .metric-card .label {
-    font-family: var(--font) !important;
     font-size: 11px; color: #000000 !important;
     text-transform: uppercase; letter-spacing: 1.5px;
     margin-bottom: 4px; font-weight: 600;
 }
 .metric-card .value {
-    font-family: var(--font) !important;
     font-size: 30px; font-weight: 700;
     line-height: 1.1; color: #000000 !important;
 }
-.metric-card .sub {
-    font-size: 12px; color: #000000 !important;
-    margin-top: 4px; font-family: var(--font) !important;
-}
+.metric-card .sub { font-size: 12px; color: #000000 !important; margin-top: 4px; }
 .v-safe    { color: #15803d !important; }
 .v-caution { color: #92400e !important; }
 .v-danger  { color: #c2410c !important; }
 .v-extreme { color: #991b1b !important; }
 
-/* ── Badges ── */
 .badge {
-    display: inline-block; padding: 3px 10px;
-    border-radius: 4px; font-family: var(--font) !important;
-    font-size: 10px; font-weight: 700;
-    letter-spacing: 1px; text-transform: uppercase;
+    display: inline-block; padding: 3px 10px; border-radius: 4px;
+    font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
 }
+/* Updated badge colours to match image: Yellow / Orange / Red scheme */
 .badge-safe    { background:#dcfce7; color:#14532d !important; border:1px solid #86efac; }
-.badge-caution { background:#fef9c3; color:#713f12 !important; border:1px solid #fde047; }
-.badge-danger  { background:#ffedd5; color:#7c2d12 !important; border:1px solid #fdba74; }
-.badge-extreme { background:#fee2e2; color:#7f1d1d !important; border:1px solid #fca5a5; }
+.badge-caution { background:#fef08a; color:#713f12 !important; border:1px solid #ca8a04; }
+.badge-danger  { background:#fb923c; color:#ffffff !important; border:1px solid #ea580c; }
+.badge-extreme { background:#dc2626; color:#ffffff !important; border:1px solid #991b1b; }
 
-/* ── Section header ── */
 .section-header {
-    font-family: var(--font) !important; font-size: 12px;
-    color: #000000 !important; text-transform: uppercase;
+    font-size: 12px; color: #000000 !important; text-transform: uppercase;
     letter-spacing: 2px; padding: 0 0 8px 0;
-    border-bottom: 2px solid var(--border);
-    margin-bottom: 16px; font-weight: 700;
+    border-bottom: 2px solid var(--border); margin-bottom: 16px; font-weight: 700;
 }
 
-/* ── Alert box ── */
 .alert-box {
     border-left: 4px solid #c2410c; background: #fff7ed;
     color: #000000 !important; padding: 14px 18px;
     border-radius: 0 6px 6px 0; margin: 8px 0;
-    font-size: 14px; font-weight: 500; font-family: var(--font) !important;
+    font-size: 14px; font-weight: 500;
 }
-.alert-box * { color: #000000 !important; font-family: var(--font) !important; }
-.alert-box strong { color: #000000 !important; font-weight: 700; }
+.alert-box * { color: #000000 !important; }
+.alert-box strong { font-weight: 700; }
 
-.main-title {
-    font-family: var(--font) !important; font-size: 22px;
-    font-weight: 700; color: #000000 !important;
-}
-.main-subtitle {
-    font-family: var(--font) !important; font-size: 13px;
-    color: #000000 !important; margin-top: 2px;
-}
+.main-title { font-size: 22px; font-weight: 700; color: #000000 !important; }
+.main-subtitle { font-size: 13px; color: #000000 !important; margin-top: 2px; }
 </style>
 """, unsafe_allow_html=True)
 
 
+# ── Change 4: Renamed 2BA640 ──────────────────────────────────────────────────
 DEVICES = {
     "2BA61C": {"name": "Ground Stenter",                        "zone": "Production"},
     "2D66E4": {"name": "Zero zero — near gate",                 "zone": "Entry/Circulation"},
     "2BA554": {"name": "Washing-Dyeing Range",                  "zone": "Production"},
     "2BA298": {"name": "Jigger",                                "zone": "Production"},
     "2BA638": {"name": "Jets — B/H Office",                     "zone": "Production"},
-    "2BA640": {"name": "Jet Dyeing — Heighted",                 "zone": "Production"},
+    "2BA640": {"name": "Long Jets — B/H Office",                "zone": "Production"},  # renamed
     "2BA578": {"name": "First Printing",                        "zone": "Production"},
     "2BA680": {"name": "Cabin & Stenter",                       "zone": "Production"},
     "2BA64C": {"name": "Stenter and Jet — Heighted",            "zone": "Production"},
@@ -369,11 +248,9 @@ def f_to_c(f: float) -> float:
 
 def heat_index_fahrenheit(T_f: float, RH: float) -> float:
     """Full NWS Rothfusz regression with low-RH and high-RH adjustments."""
-    # Simple formula first; if average with T < 80°F, use it directly
     hi_simple = 0.5 * (T_f + 61.0 + (T_f - 68.0) * 1.2 + RH * 0.094)
     if (hi_simple + T_f) / 2 < 80:
         return hi_simple
-    # Full Rothfusz regression
     HI = (-42.379
           + 2.04901523  * T_f
           + 10.14333127 * RH
@@ -383,10 +260,8 @@ def heat_index_fahrenheit(T_f: float, RH: float) -> float:
           + 1.22874e-3  * T_f ** 2 * RH
           + 8.5282e-4   * T_f * RH ** 2
           - 1.99e-6     * T_f ** 2 * RH ** 2)
-    # Low-RH adjustment
     if RH < 13 and 80 <= T_f <= 112:
         HI -= ((13 - RH) / 4) * math.sqrt((17 - abs(T_f - 95)) / 17)
-    # High-RH adjustment
     if RH > 85 and 80 <= T_f <= 87:
         HI += ((RH - 85) / 10) * ((87 - T_f) / 5)
     return HI
@@ -402,6 +277,32 @@ def heat_index_category(hi_f: float):
         return "Danger",          "extreme"
     else:
         return "Extreme Danger",  "extreme"
+
+# ── Change 1: NWS-aligned colour palette (Yellow → Orange → Red) ─────────────
+# Matches image exactly: yellow=Caution, orange=Extreme Caution/Danger, red=Extreme Danger
+HI_COLORSCALE = [
+    [0.00, "#ffffff"],   # Normal  (white/green region — below caution)
+    [0.20, "#ffff00"],   # Caution (bright yellow)
+    [0.45, "#ffa500"],   # Extreme Caution (orange)
+    [0.70, "#ff6600"],   # Danger (deep orange)
+    [1.00, "#ff0000"],   # Extreme Danger (red)
+]
+
+# Category colours matching the legend image
+CAT_COLORS = {
+    "Normal":          "#ffffff",
+    "Caution":         "#ffff00",
+    "Extreme Caution": "#ffa500",
+    "Danger":          "#ff6600",
+    "Extreme Danger":  "#ff0000",
+}
+CAT_TEXT_COLORS = {
+    "Normal":          "#000000",
+    "Caution":         "#000000",
+    "Extreme Caution": "#000000",
+    "Danger":          "#000000",
+    "Extreme Danger":  "#000000",
+}
 
 def compute_heat_index(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
@@ -498,10 +399,8 @@ with st.sidebar:
     date_range = st.date_input(
         "From → To",
         value=(today - timedelta(days=1), today),
-        min_value=min_date,
-        max_value=today,
-        key="dr",
-        label_visibility="hidden",
+        min_value=min_date, max_value=today,
+        key="dr", label_visibility="hidden",
     )
     if isinstance(date_range, (list, tuple)) and len(date_range) == 2:
         date_from, date_to = date_range[0], date_range[1]
@@ -525,8 +424,7 @@ with st.sidebar:
                     f"📅 {date_from.strftime('%d %b')} → {date_to.strftime('%d %b %Y')}"
                     f"</div>", unsafe_allow_html=True)
     else:
-        label_map = {6:"Last 6 hours", 24:"Last 24 hours",
-                     48:"Last 48 hours", 168:"Last 7 days"}
+        label_map = {6:"Last 6 hours", 24:"Last 24 hours", 48:"Last 48 hours", 168:"Last 7 days"}
         lbl = label_map.get(st.session_state.selected_hours,
                              f"Last {st.session_state.selected_hours}h")
         st.markdown(f"<div style='font-size:11px;color:#1d4ed8;font-weight:600;"
@@ -546,7 +444,7 @@ with st.sidebar:
 
     st.markdown("---")
     st.markdown("""
-    <div style='font-size:10px; color:#000000 !important; font-family: Calibri, Segoe UI, Arial, sans-serif;'>
+    <div style='font-size:10px; color:#000000; font-family:Calibri,Segoe UI,Arial,sans-serif;'>
     <strong>DATA SOURCE</strong><br>
     <a href='https://opendata.oizom.com' style='color:#c2410c'>opendata.oizom.com</a><br><br>
     <strong>REFERENCE</strong><br>
@@ -590,16 +488,16 @@ if not data_store:
 
 # ── Header ────────────────────────────────────────────────────────────────────
 st.markdown("""
-<div style='padding:14px 22px 20px 22px; background:#bfdbfe; border-radius:12px; margin-bottom:16px; border:1px solid #93c5fd;'>
-  <div style='font-family:Calibri,Segoe UI,Arial,sans-serif; font-size:12px; color:#c2410c;
-              letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; font-weight:700;'>
+<div style='padding:14px 22px 20px 22px; background:#bfdbfe; border-radius:12px;
+            margin-bottom:16px; border:1px solid #93c5fd;'>
+  <div style='font-size:12px; color:#c2410c; letter-spacing:2px;
+              text-transform:uppercase; margin-bottom:6px; font-weight:700;'>
     Indoor Occupational Heat Stress
   </div>
-  <h1 style='margin:0; font-family:Calibri,Segoe UI,Arial,sans-serif; font-weight:700;
-             font-size:26px; color:#000000; letter-spacing:-0.3px;'>
+  <h1 style='margin:0; font-weight:700; font-size:26px; color:#000000;'>
     Unit 1 — Live Sensor Dashboard
   </h1>
-  <p style='margin:6px 0 0 0; color:#000000; font-size:13px; font-weight:500; font-family:Calibri,Segoe UI,Arial,sans-serif;'>
+  <p style='margin:6px 0 0 0; color:#000000; font-size:13px; font-weight:500;'>
     Surat · Heat Index Analysis
   </p>
 </div>
@@ -641,30 +539,22 @@ _GRID = "#bfdbfe"
 def _apply_theme(fig, height=400, margin=None, legend=None, showlegend=False):
     mg = margin or dict(l=60, r=20, t=40, b=40)
     fig.update_layout(
-        paper_bgcolor="#dbeafe",
-        plot_bgcolor="#eff6ff",
-        height=height,
-        showlegend=showlegend,
-        margin=mg,
+        paper_bgcolor="#dbeafe", plot_bgcolor="#eff6ff",
+        height=height, showlegend=showlegend, margin=mg,
+        font=dict(family=_FONT, color="#000000", size=13),
     )
-    fig.update_layout(font=dict(family=_FONT, color="#000000", size=13))
     if legend is not None:
         fig.update_layout(legend=legend)
 
 def _style_axes(fig, xtitle="", ytitle="", xrange=None):
     xkw = dict(gridcolor=_GRID, linecolor="#93c5fd", color="#000000",
                tickfont=_TF, automargin=True)
-    if xtitle:
-        xkw["title_text"] = xtitle
-        xkw["title_font"] = dict(color="#000000", family=_FONT)
-    if xrange:
-        xkw["range"] = xrange
+    if xtitle: xkw["title_text"] = xtitle; xkw["title_font"] = dict(color="#000000", family=_FONT)
+    if xrange: xkw["range"] = xrange
     fig.update_xaxes(**xkw)
     ykw = dict(gridcolor=_GRID, linecolor="#93c5fd", color="#000000",
                tickfont=_TF, automargin=True)
-    if ytitle:
-        ykw["title_text"] = ytitle
-        ykw["title_font"] = dict(color="#000000", family=_FONT)
+    if ytitle: ykw["title_text"] = ytitle; ykw["title_font"] = dict(color="#000000", family=_FONT)
     fig.update_yaxes(**ykw)
 
 
@@ -714,12 +604,10 @@ with tab_overview:
               <div class='sub'>{selected_devices[max_loc]["name"]} &nbsp;
                 <span class='badge badge-{max_level}'>{max_cat}</span></div>
             </div>""", unsafe_allow_html=True)
-
         st.markdown("")
 
     st.markdown("<div class='section-header'>All Sensor Readings — Current</div>",
                 unsafe_allow_html=True)
-
     df_sum = summary_table()
     if not df_sum.empty:
         def style_risk(val):
@@ -737,8 +625,7 @@ with tab_overview:
             styled = df_sum.style.applymap(style_risk, subset=["Risk"])
         st.dataframe(styled, use_container_width=True, hide_index=True)
 
-    st.markdown("<div class='section-header'>⚠ Active Alerts</div>",
-                unsafe_allow_html=True)
+    st.markdown("<div class='section-header'>⚠ Active Alerts</div>", unsafe_allow_html=True)
     alert_count = 0
     for did, info in selected_devices.items():
         row = get_latest(did)
@@ -776,63 +663,116 @@ with tab_heatmap:
         cats.append(cat)
 
     if hi_vals:
-        hi_c_vals = [f_to_c(v) for v in hi_vals]
-        color_map = {
-            "Normal":         "#16a34a",
-            "Caution":        "#ca8a04",
-            "Extreme Caution":"#ea580c",
-            "Danger":         "#dc2626",
-            "Extreme Danger": "#7f1d1d",
-        }
-        bar_colors = [color_map.get(c, "#6b7280") for c in cats]
+        hi_c_vals  = [f_to_c(v) for v in hi_vals]
+        bar_colors = [CAT_COLORS.get(c, "#cccccc") for c in cats]
+        txt_colors = [CAT_TEXT_COLORS.get(c, "#000000") for c in cats]
 
-        fig = go.Figure(go.Bar(
-            x=names, y=hi_c_vals, orientation="v",
-            marker_color=bar_colors,
-            text=[f"{v:.1f}°C" for v in hi_c_vals],
-            textposition="outside",
-            textfont=dict(color="#000000", size=11),
-            hovertemplate="<b>%{x}</b><br>Heat Index: %{y:.1f}°C<extra></extra>",
-        ))
-        for threshold_f, color in [
-                (80,  "#16a34a"),
-                (91,  "#ca8a04"),
-                (103, "#ea580c"),
-                (125, "#dc2626")]:
-            fig.add_hline(y=f_to_c(threshold_f), line_dash="dot",
-                          line_color=color, line_width=1.5)
+        fig = go.Figure()
+        for i in range(len(names)):
+            fig.add_trace(go.Bar(
+                x=[names[i]], y=[hi_c_vals[i]],
+                marker_color=bar_colors[i],
+                marker_line_color="#888888",
+                marker_line_width=0.8,
+                # ── Change 2: label on each bar showing value + category ──
+                text=f"{hi_c_vals[i]:.1f}°C<br>{cats[i]}",
+                textposition="outside",
+                textfont=dict(color="#000000", size=10, family=_FONT),
+                hovertemplate=f"<b>{names[i]}</b><br>Heat Index: {hi_c_vals[i]:.1f}°C"
+                              f"<br>Category: {cats[i]}<extra></extra>",
+                name=cats[i], showlegend=False,
+            ))
 
-        _apply_theme(fig, height=520, margin=dict(l=60, r=20, t=40, b=160))
+        # NWS threshold lines (in °C)
+        threshold_lines = [
+            (f_to_c(80),  "Caution",         "#ffff00"),
+            (f_to_c(91),  "Extreme Caution", "#ffa500"),
+            (f_to_c(103), "Danger",           "#ff6600"),
+            (f_to_c(125), "Extreme Danger",   "#ff0000"),
+        ]
+        for y_c, lbl, color in threshold_lines:
+            fig.add_hline(y=y_c, line_dash="dot", line_color=color,
+                          line_width=1.5,
+                          annotation_text=f"  {lbl} ({y_c:.0f}°C)",
+                          annotation_font_color="#000000",
+                          annotation_font_size=10,
+                          annotation_position="right")
+
+        # ── Change 1: Legend patch matching image colours ──
+        for cat_name, bg, txt in [
+            ("Caution",         "#ffff00", "#000000"),
+            ("Extreme Caution", "#ffa500", "#000000"),
+            ("Danger",          "#ff6600", "#000000"),
+            ("Extreme Danger",  "#ff0000", "#000000"),
+        ]:
+            fig.add_trace(go.Bar(
+                x=[None], y=[None],
+                name=cat_name,
+                marker_color=bg,
+                marker_line_color="#888888",
+                marker_line_width=0.8,
+                showlegend=True,
+            ))
+
+        _apply_theme(fig, height=560, margin=dict(l=70, r=160, t=50, b=160),
+                     showlegend=True,
+                     legend=dict(
+                         bgcolor="#eff6ff", bordercolor="#93c5fd",
+                         font=dict(color="#000000", size=11, family=_FONT),
+                         x=1.01, y=1, xanchor="left",
+                         title=dict(text="Risk Level", font=dict(color="#000000", family=_FONT)),
+                     ))
         _style_axes(fig, ytitle="Heat Index (°C)")
         fig.update_xaxes(tickangle=-40, tickfont=dict(size=10, family=_FONT, color="#000000"))
+        fig.update_yaxes(rangemode="tozero")
         st.plotly_chart(fig, use_container_width=True)
 
-    st.markdown("<div class='section-header'>Temperature × Humidity Scatter</div>",
+    # ── Change 3: Grouped bar chart of Temp & Humidity per device ─────────────
+    st.markdown("<div class='section-header'>Temperature & Humidity — All Devices</div>",
                 unsafe_allow_html=True)
-    all_dfs = []
-    for did, info in selected_devices.items():
-        df = data_store.get(did)
-        if df is None or df.empty:
-            continue
-        df2 = df.copy()
-        df2["Device"]   = did
-        df2["Location"] = info["name"]
-        df2["Zone"]     = info["zone"]
-        all_dfs.append(df2)
 
-    if all_dfs:
-        big = pd.concat(all_dfs, ignore_index=True)
-        big["HI_C_col"] = big["HI_C"]
-        fig2 = px.scatter(
-            big, x="Temperature", y="Humidity", color="HI_C_col",
-            hover_data=["Location", "Time", "HI_Cat"],
-            color_continuous_scale=["#16a34a","#ca8a04","#ea580c","#dc2626"],
-            labels={"Temperature":"Temp (°C)","Humidity":"RH (%)","HI_C_col":"HI (°C)"},
-        )
-        _apply_theme(fig2, height=400, margin=dict(l=20, r=20, t=20, b=40))
-        _style_axes(fig2, xtitle="Temp (°C)", ytitle="RH (%)")
-        fig2.update_layout(coloraxis_colorbar=dict(tickfont=_TF, title=dict(font=_TF)))
-        st.plotly_chart(fig2, use_container_width=True)
+    bar_names, bar_temps, bar_hums = [], [], []
+    for did, info in selected_devices.items():
+        row = get_latest(did)
+        if row is None:
+            continue
+        bar_names.append(info["name"])
+        bar_temps.append(round(row.get("Temperature", np.nan), 1))
+        bar_hums.append(round(row.get("Humidity",    np.nan), 1))
+
+    if bar_names:
+        fig_bar = go.Figure()
+        fig_bar.add_trace(go.Bar(
+            name="Temperature (°C)",
+            x=bar_names, y=bar_temps,
+            marker_color="#ea580c",
+            marker_line_color="#c2410c", marker_line_width=0.8,
+            text=[f"{v:.1f}°C" for v in bar_temps],
+            textposition="outside",
+            textfont=dict(color="#000000", size=10, family=_FONT),
+            hovertemplate="<b>%{x}</b><br>Temperature: %{y:.1f}°C<extra></extra>",
+        ))
+        fig_bar.add_trace(go.Bar(
+            name="Relative Humidity (%)",
+            x=bar_names, y=bar_hums,
+            marker_color="#0284c7",
+            marker_line_color="#0369a1", marker_line_width=0.8,
+            text=[f"{v:.1f}%" for v in bar_hums],
+            textposition="outside",
+            textfont=dict(color="#000000", size=10, family=_FONT),
+            hovertemplate="<b>%{x}</b><br>Humidity: %{y:.1f}%<extra></extra>",
+        ))
+        fig_bar.update_layout(barmode="group")
+        _apply_theme(fig_bar, height=500, margin=dict(l=70, r=20, t=40, b=160),
+                     showlegend=True,
+                     legend=dict(bgcolor="#eff6ff", bordercolor="#93c5fd",
+                                 font=dict(color="#000000", size=12, family=_FONT),
+                                 orientation="h", yanchor="bottom", y=1.02,
+                                 xanchor="left", x=0))
+        _style_axes(fig_bar, ytitle="Value")
+        fig_bar.update_xaxes(tickangle=-40, tickfont=dict(size=10, family=_FONT, color="#000000"))
+        fig_bar.update_yaxes(rangemode="tozero")
+        st.plotly_chart(fig_bar, use_container_width=True)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -864,16 +804,15 @@ with tab_trends:
         fig3.add_trace(go.Scatter(x=df_t["Time"], y=df_t["HI_C"],
                                   mode="lines", name="HI",
                                   line=dict(color="#dc2626", width=2)), row=3, col=1)
-        for y_f, color in [(80,"#16a34a"),(91,"#ca8a04"),(103,"#ea580c"),(125,"#dc2626")]:
+        for y_f, color in [(80,"#ffff00"),(91,"#ffa500"),(103,"#ff6600"),(125,"#ff0000")]:
             fig3.add_hline(y=f_to_c(y_f), line_dash="dot", line_color=color,
-                           line_width=1, row=3, col=1)
+                           line_width=1.5, row=3, col=1)
 
         _apply_theme(fig3, height=600, margin=dict(l=60, r=20, t=40, b=40))
         _style_axes(fig3)
         fig3.update_layout(
             legend=dict(bgcolor="#eff6ff", bordercolor="#93c5fd",
-                        font=dict(color="#000000", family=_FONT)),
-        )
+                        font=dict(color="#000000", family=_FONT)))
         for ann in fig3.layout.annotations:
             ann.font.color  = "#000000"
             ann.font.family = _FONT
@@ -915,32 +854,84 @@ with tab_hi:
     st.markdown("<div class='section-header'>NWS Heat Index Reference Chart</div>",
                 unsafe_allow_html=True)
 
+    # ── Change 1 & 2: Colours match image + value labels inside cells ─────────
     rh_range     = list(range(40, 105, 5))
     temp_f_range = list(range(80, 112, 2))
     temp_c_range = [round(f_to_c(t), 1) for t in temp_f_range]
     z_matrix     = [[round(f_to_c(heat_index_fahrenheit(float(T), float(RH))), 1)
                      for RH in rh_range] for T in temp_f_range]
 
-    fig5 = go.Figure(go.Heatmap(
+    # Build colour matrix matching image exactly
+    def hi_cell_color(hi_c):
+        hi_f = hi_c * 9/5 + 32
+        if hi_f < 80:   return "#ffffff"   # white / no stress
+        elif hi_f < 91: return "#ffff00"   # yellow — Caution
+        elif hi_f < 103:return "#ffa500"   # orange — Extreme Caution
+        elif hi_f < 125:return "#ff0000"   # red    — Danger / Extreme Danger
+        else:           return "#cc0000"   # dark red
+
+    # Custom discrete colour per cell using annotation trick
+    fig5 = go.Figure()
+
+    # Background heatmap with custom colourscale
+    fig5.add_trace(go.Heatmap(
         z=z_matrix,
         x=[f"{r}%" for r in rh_range],
         y=[f"{tc}°C" for tc in temp_c_range],
-        colorscale=[[0,"#16a34a"],[0.25,"#ca8a04"],
-                    [0.55,"#ea580c"],[0.75,"#dc2626"],[1.0,"#7f1d1d"]],
-        text=[[str(v) for v in row] for row in z_matrix],
-        texttemplate="%{text}",
-        textfont=dict(size=9, family="Calibri, Segoe UI, Arial, sans-serif", color="#000000"),
-        hovertemplate="Temp: %{y}<br>RH: %{x}<br>HI: %{z}°C<extra></extra>",
+        colorscale=[
+            [0.00, "#ffffff"],
+            [0.20, "#ffff00"],
+            [0.50, "#ffa500"],
+            [0.75, "#ff0000"],
+            [1.00, "#cc0000"],
+        ],
+        zmin=f_to_c(70), zmax=f_to_c(130),
         showscale=True,
         colorbar=dict(
             title=dict(text="HI (°C)",
-                       font=dict(family="Calibri, Segoe UI, Arial, sans-serif", color="#000000")),
-            tickfont=dict(family="Calibri, Segoe UI, Arial, sans-serif", color="#000000"),
+                       font=dict(family=_FONT, color="#000000")),
+            tickfont=dict(family=_FONT, color="#000000"),
+            tickvals=[f_to_c(v) for v in [75, 80, 91, 103, 115, 125]],
+            ticktext=["<27°C<br>Normal",
+                      "27°C<br>Caution",
+                      "33°C<br>Ext. Caution",
+                      "39°C<br>Danger",
+                      "46°C",
+                      "52°C<br>Ext. Danger"],
         ),
+        # ── Change 2: Show value labels in each cell ──
+        text=[[str(v) for v in row] for row in z_matrix],
+        texttemplate="%{text}",
+        textfont=dict(size=9, family=_FONT, color="#000000"),
+        hovertemplate="Temp: %{y}<br>RH: %{x}<br>HI: %{z}°C<extra></extra>",
     ))
-    _apply_theme(fig5, height=550, margin=dict(l=20, r=20, t=20, b=40))
+
+    _apply_theme(fig5, height=580, margin=dict(l=20, r=120, t=30, b=40))
     _style_axes(fig5, xtitle="Relative Humidity (%)", ytitle="Air Temperature (°C)")
+    fig5.update_layout(plot_bgcolor="#ffffff", paper_bgcolor="#dbeafe")
     st.plotly_chart(fig5, use_container_width=True)
+
+    # Colour legend matching image exactly
+    st.markdown("""
+    <div style='display:flex; gap:24px; flex-wrap:wrap; padding:10px 0 16px 0; align-items:center;'>
+      <div style='display:flex;align-items:center;gap:6px;'>
+        <div style='width:28px;height:20px;background:#ffff00;border:1px solid #ca8a04;'></div>
+        <span style='font-size:12px;color:#000000;font-weight:600;'>Caution</span>
+      </div>
+      <div style='display:flex;align-items:center;gap:6px;'>
+        <div style='width:28px;height:20px;background:#ffa500;border:1px solid #ea580c;'></div>
+        <span style='font-size:12px;color:#000000;font-weight:600;'>Extreme Caution</span>
+      </div>
+      <div style='display:flex;align-items:center;gap:6px;'>
+        <div style='width:28px;height:20px;background:#ff6600;border:1px solid #dc2626;'></div>
+        <span style='font-size:12px;color:#000000;font-weight:600;'>Danger</span>
+      </div>
+      <div style='display:flex;align-items:center;gap:6px;'>
+        <div style='width:28px;height:20px;background:#ff0000;border:1px solid #991b1b;'></div>
+        <span style='font-size:12px;color:#000000;font-weight:600;'>Extreme Danger</span>
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
 
     st.markdown("<div class='section-header'>Risk Levels</div>", unsafe_allow_html=True)
     col1, col2 = st.columns(2)
@@ -957,13 +948,12 @@ with tab_hi:
             st.markdown(f"""
             <div class='metric-card' style='margin-bottom:8px'>
               <span class='badge badge-{level}'>{name}</span>
-              <span style='margin-left:8px; font-family:Calibri,Segoe UI,Arial,sans-serif; font-size:12px;
-                           color:#000000; font-weight:600'>{rng}</span>
-              <div style='font-size:12px; color:#000000; margin-top:6px'>{desc}</div>
+              <span style='margin-left:8px;font-size:12px;color:#000000;font-weight:600'>{rng}</span>
+              <div style='font-size:12px;color:#000000;margin-top:6px'>{desc}</div>
             </div>""", unsafe_allow_html=True)
 
-    st.info("💡 **Note:** Heat Index is computed internally in °F per the NWS Rothfusz regression "
-            "(T in °F, RH in %) with low-RH and high-RH adjustments, then converted to °C for display.")
+    st.info("💡 **Note:** Heat Index is computed in °F per the NWS Rothfusz regression "
+            "(with low-RH and high-RH adjustments), then converted to °C for display.")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -999,18 +989,15 @@ with tab_devices:
                               gap:8px;margin-top:12px;'>
                     <div>
                       <div class='label'>Temp</div>
-                      <div style='font-family:Calibri,Segoe UI,Arial,sans-serif;font-size:16px;
-                                  color:#c2410c;font-weight:600'>{temp_c:.1f}°C</div>
+                      <div style='font-size:16px;color:#c2410c;font-weight:600'>{temp_c:.1f}°C</div>
                     </div>
                     <div>
                       <div class='label'>RH</div>
-                      <div style='font-family:Calibri,Segoe UI,Arial,sans-serif;font-size:16px;
-                                  color:#0369a1;font-weight:600'>{hum:.1f}%</div>
+                      <div style='font-size:16px;color:#0369a1;font-weight:600'>{hum:.1f}%</div>
                     </div>
                     <div>
                       <div class='label'>HI</div>
-                      <div style='font-family:Calibri,Segoe UI,Arial,sans-serif;font-size:16px;
-                                  color:#b91c1c;font-weight:600'>{f_to_c(hi_f):.1f}°C</div>
+                      <div style='font-size:16px;color:#b91c1c;font-weight:600'>{f_to_c(hi_f):.1f}°C</div>
                     </div>
                   </div>
                 </div>""", unsafe_allow_html=True)
@@ -1068,24 +1055,7 @@ This real-time dashboard displays environmental sensor data from **Unit 1**, one
 
 Sensors are deployed across the facility — from stenter machines and jet dyeing areas to circulation zones and folding tables — capturing spatial and temporal variation in indoor heat conditions.
 
-**Heat Index** is computed using the **NWS Rothfusz regression** formula (with low-RH and high-RH adjustments), applied after converting sensor temperatures from °C to °F, then converted back to °C for display:
-
-        """)
-        st.markdown("""
-<div style='background:#dbeafe; border:1px solid #93c5fd; border-radius:8px;
-            padding:16px 20px; margin:8px 0 12px 0;
-            font-family:Calibri,Segoe UI,Arial,sans-serif; font-size:14px;
-            color:#000000; font-weight:500; line-height:1.8;'>
-  HI = −42.379 + 2.049T + 10.143RH − 0.225T·RH − 6.838×10⁻³T²<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;− 5.482×10⁻²RH² + 1.229×10⁻³T²·RH + 8.528×10⁻⁴T·RH²<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;− 1.99×10⁻⁶T²·RH²
-</div>
-<p style='font-family:Calibri,Segoe UI,Arial,sans-serif; font-size:13px;
-          color:#000000; margin:4px 0 12px 0;'>
-  where T = temperature in °F, RH = relative humidity in %. Result displayed in °C.
-</p>
-        """, unsafe_allow_html=True)
-        st.markdown("""
+**Heat Index** is computed using the **NWS Rothfusz regression** formula (with low-RH and high-RH adjustments), applied after converting sensor temperatures from °C to °F, then converted back to °C for display.
 
 ### Study Unit Typologies
 
@@ -1100,8 +1070,7 @@ Sensors are deployed across the facility — from stenter machines and jet dyein
 
 ### Authors
 
-Pooja Yadav · Mehul Patel · Abhijit Namboothiri · Ambar Singh
-*WRI India*
+Pooja Yadav · Mehul Patel · Abhijit Namboothiri · Ambar Singh · *WRI India*
 
 ---
 
@@ -1113,7 +1082,7 @@ Monitoring period: 12 months (continuous) · Interval: Hourly readings
 
     with col2:
         st.markdown("""
-### Risk Reference
+### Risk Reference (°C)
 
 | Heat Index | Category |
 |------------|----------|
@@ -1128,8 +1097,8 @@ Monitoring period: 12 months (continuous) · Interval: Hourly readings
 ### Key References
 
 - ILO (2019). *Working on a Warmer Planet*
-- Foster et al. (2021). *Quantifying the impact of heat on human physical work capacity*
-- Hardik Parmar et al. (2023). Foundry heat stress study
+- Foster et al. (2021). *Heat and human work capacity*
+- Hardik Parmar et al. (2023). Foundry heat stress
 - OSHWC 2020, Section 21
 - ISHRAE thermal comfort standards
 
@@ -1144,8 +1113,7 @@ Data: [opendata.oizom.com](https://opendata.oizom.com)
 
     st.markdown("---")
     st.markdown("""
-    <div style='font-family:Calibri,Segoe UI,Arial,sans-serif;font-size:10px;
-                color:#000000;text-align:center;font-weight:500'>
+    <div style='font-size:10px;color:#000000;text-align:center;font-weight:500'>
     © World Resources Institute · Dashboard for research purposes only ·
     Data: Oizom OpenData API · Heat Index: NWS Rothfusz Regression
     </div>
