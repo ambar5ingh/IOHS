@@ -47,57 +47,6 @@ html, body, [class*="css"], .stApp {
     font-family: var(--font) !important;
 }
 
-/* ── Sidebar collapse button ── */
-[data-testid="collapsedControl"] {
-    background-color: #1d4ed8 !important;
-    border: 2px solid #1e40af !important;
-    border-radius: 50% !important;
-    box-shadow: 0 2px 8px rgba(37,99,235,0.5) !important;
-}
-[data-testid="collapsedControl"] svg {
-    fill: #ffffff !important;
-    stroke: #ffffff !important;
-}
-
-/* ── Hide "keyboard_double_arrow" Material icon text ── */
-/* Targets the raw text node Streamlit injects as icon label */
-[data-testid="collapsedControl"] span,
-[data-testid="collapsedControl"] p {
-    font-size: 0 !important;
-    line-height: 0 !important;
-    color: transparent !important;
-    overflow: hidden !important;
-    width: 0 !important;
-    height: 0 !important;
-    position: absolute !important;
-}
-/* Keep the SVG icon inside those spans still visible */
-[data-testid="collapsedControl"] span svg,
-[data-testid="collapsedControl"] p svg {
-    width: 20px !important;
-    height: 20px !important;
-    font-size: initial !important;
-    position: static !important;
-    overflow: visible !important;
-    fill: #ffffff !important;
-}
-svg title, svg desc { display: none !important; }
-
-/* ── Nuclear option: hide Material Icons font text in sidebar toggle ── */
-/* The text "keyboard_double_arrow_right/left" is rendered via font ligatures */
-[data-testid="stSidebarCollapsedControl"] span,
-[data-testid="stSidebarNavCollapseButton"] span,
-button[data-testid="baseButton-headerNoPadding"] {
-    font-family: inherit !important;
-    speak: none !important;
-}
-/* Match the exact element Streamlit 1.3x uses for the icon text */
-.material-icons, .material-symbols-rounded,
-[class*="material"] {
-    font-size: 0 !important;
-    color: transparent !important;
-}
-
 [data-testid="stSidebar"] .stButton > button {
     background-color: #eff6ff !important;
     color: #000000 !important;
@@ -242,6 +191,52 @@ hr { border-color: var(--border) !important; }
 .main-subtitle { font-size: 13px; color: #000000 !important; margin-top: 2px; }
 </style>
 """, unsafe_allow_html=True)
+
+# ── Floating sidebar toggle button (replaces broken Streamlit default) ────────
+import streamlit.components.v1 as components
+components.html("""
+<style>
+  #sidebar-toggle-btn {
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 99999;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #1d4ed8;
+    border: 2px solid #1e40af;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.5);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  #sidebar-toggle-btn:hover { background-color: #1e40af; }
+  #sidebar-toggle-btn svg { width: 20px; height: 20px; fill: #ffffff; }
+</style>
+<button id="sidebar-toggle-btn" title="Toggle sidebar" onclick="toggleSidebar()">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+  </svg>
+</button>
+<script>
+function toggleSidebar() {
+  // Find Streamlit's sidebar collapse button and click it
+  const btns = window.parent.document.querySelectorAll(
+    '[data-testid="collapsedControl"], button[aria-label="Close sidebar"], ' +
+    'button[aria-label="Collapse sidebar"], button[aria-label="Expand sidebar"], ' +
+    'button[aria-label="Open sidebar"], [data-testid="stSidebarCollapsedControl"]'
+  );
+  if (btns.length > 0) {
+    btns[0].click();
+  }
+}
+</script>
+""", height=0, scrolling=False)
+
+
 
 
 # ── Change 4: Renamed 2BA640 ──────────────────────────────────────────────────
@@ -1148,7 +1143,7 @@ Data: [opendata.oizom.com](https://opendata.oizom.com)
     st.markdown("---")
     st.markdown("""
     <div style='font-size:10px;color:#000000;text-align:center;font-weight:500'>
-    Dashboard for research purposes only ·
+    © World Resources Institute · Dashboard for research purposes only ·
     Data: Oizom OpenData API · Heat Index: NWS Rothfusz Regression
     </div>
     """, unsafe_allow_html=True)
