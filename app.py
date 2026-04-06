@@ -47,6 +47,7 @@ html, body, [class*="css"], .stApp {
     font-family: var(--font) !important;
 }
 
+/* ── Sidebar collapse button — blue circle ── */
 [data-testid="collapsedControl"],
 [data-testid="stSidebarCollapsedControl"],
 button[aria-label="Collapse sidebar"],
@@ -54,11 +55,8 @@ button[aria-label="Expand sidebar"],
 button[aria-label="Close sidebar"],
 button[aria-label="Open sidebar"] {
     background-color: #1d4ed8 !important;
-    color: transparent !important;
     border: 2px solid #1e40af !important;
     border-radius: 50% !important;
-    opacity: 1 !important;
-    visibility: visible !important;
     box-shadow: 0 2px 8px rgba(37,99,235,0.5) !important;
 }
 [data-testid="collapsedControl"] svg,
@@ -70,28 +68,7 @@ button[aria-label="Open sidebar"] svg {
     color: #ffffff !important;
     stroke: #ffffff !important;
 }
-
-/* ── Hide "Key double" tooltip text — keep button visible ── */
-svg title, svg desc {
-    display: none !important;
-}
-/* Only hide tooltip popups, not the button itself */
-[role="tooltip"] {
-    visibility: hidden !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-}
-/* Hide text spans inside collapse buttons but NOT the button or its SVG */
-[data-testid="collapsedControl"] > span:not(:has(svg)),
-[data-testid="stSidebarNavCollapseButton"] > span:not(:has(svg)),
-button[data-testid="baseButton-headerNoPadding"] > span:not(:has(svg)) {
-    font-size: 0 !important;
-    color: transparent !important;
-    width: 0 !important;
-    max-width: 0 !important;
-    overflow: hidden !important;
-    display: inline-block !important;
-}
+svg title, svg desc { display: none !important; }
 
 [data-testid="stSidebar"] .stButton > button {
     background-color: #eff6ff !important;
