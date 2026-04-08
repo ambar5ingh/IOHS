@@ -211,31 +211,23 @@ components.html("""
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.2s;
   }
-  #sidebar-toggle-btn:hover { background-color: #1e40af; }
   #sidebar-toggle-btn svg { width: 20px; height: 20px; fill: #ffffff; }
 </style>
 <button id="sidebar-toggle-btn" title="Toggle sidebar" onclick="toggleSidebar()">
-  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
-  </svg>
+  <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
 </button>
 <script>
 function toggleSidebar() {
-  // Find Streamlit's sidebar collapse button and click it
   const btns = window.parent.document.querySelectorAll(
-    '[data-testid="collapsedControl"], button[aria-label="Close sidebar"], ' +
-    'button[aria-label="Collapse sidebar"], button[aria-label="Expand sidebar"], ' +
-    'button[aria-label="Open sidebar"], [data-testid="stSidebarCollapsedControl"]'
+    '[data-testid="collapsedControl"], [data-testid="stSidebarCollapsedControl"], ' +
+    'button[aria-label="Close sidebar"], button[aria-label="Collapse sidebar"], ' +
+    'button[aria-label="Expand sidebar"], button[aria-label="Open sidebar"]'
   );
-  if (btns.length > 0) {
-    btns[0].click();
-  }
+  if (btns.length > 0) btns[0].click();
 }
 </script>
-""", height=0, scrolling=False)
-
+""", height=50, scrolling=False)   # ← height=50, not 0
 
 
 
