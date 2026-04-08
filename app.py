@@ -580,8 +580,8 @@ with st.sidebar:
     NWS Heat Index Chart<br>
     Rothfusz Regression<br><br>
     <strong>UNITS</strong><br>
-    Temperature → °C<br>
-    Heat Index → °C (NWS)
+    Temperature &#8594; &deg;C<br>
+    Heat Index &#8594; &deg;C (NWS)
     </div>
     """, unsafe_allow_html=True)
 
