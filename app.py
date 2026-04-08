@@ -166,7 +166,6 @@ hr { border-color: var(--border) !important; }
     display: inline-block; padding: 3px 10px; border-radius: 4px;
     font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
 }
-/* Updated badge colours to match image: Yellow / Orange / Red scheme */
 .badge-safe    { background:#dcfce7; color:#14532d !important; border:1px solid #86efac; }
 .badge-caution { background:#fef08a; color:#713f12 !important; border:1px solid #ca8a04; }
 .badge-danger  { background:#fb923c; color:#ffffff !important; border:1px solid #ea580c; }
@@ -192,175 +191,21 @@ hr { border-color: var(--border) !important; }
 </style>
 """, unsafe_allow_html=True)
 
-# ── Sidebar toggle button ─────────────────────────────────────────────────
-st.markdown("""
-<style>
-#sidebar-toggle-btn {
-    position: fixed;
-    top: 14px;
-    left: 14px;
-    z-index: 99999;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background-color: #1d4ed8;
-    border: 2px solid #1e40af;
-    box-shadow: 0 2px 8px rgba(37,99,235,0.5);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s;
-}
-#sidebar-toggle-btn:hover { background-color: #1e40af; }
-#sidebar-toggle-btn svg { width: 20px; height: 20px; fill: #ffffff; }
-</style>
-<button id="sidebar-toggle-btn" title="Toggle sidebar">
-  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
-  </svg>
-</button>
-""", unsafe_allow_html=True)
 
-import streamlit.components.v1 as components
-components.html("""
-<script>
-(function() {
-    function forceSidebarOpen(doc) {
-        const sidebar = doc.querySelector('[data-testid="stSidebar"]');
-        if (!sidebar) return false;
-
-        // Remove any inline styles hiding it
-        sidebar.style.removeProperty('display');
-        sidebar.style.removeProperty('width');
-        sidebar.style.removeProperty('min-width');
-        sidebar.style.removeProperty('max-width');
-        sidebar.style.removeProperty('transform');
-        sidebar.style.removeProperty('opacity');
-        sidebar.style.removeProperty('visibility');
-
-        // Force open state via attribute
-        sidebar.setAttribute('aria-expanded', 'true');
-
-        // Find the inner section and force it visible
-        const inner = sidebar.querySelector('section');
-        if (inner) {
-            inner.style.removeProperty('transform');
-            inner.style.removeProperty('display');
-            inner.style.width = '';
-        }
-
-        // Inject a style override to keep it visible
-        let styleTag = doc.getElementById('__sidebar_force_style');
-        if (!styleTag) {
-            styleTag = doc.createElement('style');
-            styleTag.id = '__sidebar_force_style';
-            doc.head.appendChild(styleTag);
-        }
-        styleTag.textContent = `
-            [data-testid="stSidebar"] {
-                display: block !important;
-                transform: none !important;
-                min-width: 244px !important;
-                width: 244px !important;
-                opacity: 1 !important;
-                visibility: visible !important;
-                transition: none !important;
-            }
-            [data-testid="stSidebar"] > div:first-child {
-                transform: none !important;
-                width: 244px !important;
-            }
-            [data-testid="stSidebarContent"] {
-                display: block !important;
-                visibility: visible !important;
-            }
-        `;
-        return true;
-    }
-
-    function isSidebarVisible(doc) {
-        const sidebar = doc.querySelector('[data-testid="stSidebar"]');
-        if (!sidebar) return false;
-        const style = getComputedStyle(sidebar);
-        const transform = style.transform || style.webkitTransform;
-        // If translated off-screen or hidden
-        if (style.display === 'none') return false;
-        if (style.visibility === 'hidden') return false;
-        if (style.opacity === '0') return false;
-        if (transform && transform !== 'none' && transform.includes('matrix')) {
-            // Check if translated off screen (negative X translate)
-            const matrix = new DOMMatrixReadOnly(transform);
-            if (matrix.m41 < -100) return false;
-        }
-        return true;
-    }
-
-    function toggleSidebar() {
-        const doc = window.parent.document;
-
-        if (isSidebarVisible(doc)) {
-            // Hide it — remove the force style and click native button
-            const styleTag = doc.getElementById('__sidebar_force_style');
-            if (styleTag) styleTag.textContent = '';
-
-            const collapseSelectors = [
-                'button[aria-label="Close sidebar"]',
-                'button[aria-label="Collapse sidebar"]',
-                '[data-testid="collapsedControl"]',
-                '[data-testid="stSidebarCollapsedControl"]',
-            ];
-            for (const sel of collapseSelectors) {
-                const btn = doc.querySelector(sel);
-                if (btn) { btn.click(); return; }
-            }
-        } else {
-            // Force open
-            forceSidebarOpen(doc);
-
-            // Also try native expand button
-            const expandSelectors = [
-                'button[aria-label="Expand sidebar"]',
-                'button[aria-label="Open sidebar"]',
-                '[data-testid="collapsedControl"]',
-                '[data-testid="stSidebarCollapsedControl"]',
-            ];
-            for (const sel of expandSelectors) {
-                const btn = doc.querySelector(sel);
-                if (btn) { btn.click(); break; }
-            }
-        }
-    }
-
-    // Wait for DOM to be ready, then wire up button
-    function init() {
-        const btn = window.parent.document.getElementById('sidebar-toggle-btn');
-        if (btn) {
-            btn.addEventListener('click', toggleSidebar);
-        } else {
-            setTimeout(init, 200);
-        }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        setTimeout(init, 100)
-# ── Change 4: Renamed 2BA640 ──────────────────────────────────────────────────
 DEVICES = {
     "2BA61C": {"name": "Ground Stenter",                        "zone": "Production"},
     "2D66E4": {"name": "Zero zero — near gate",                 "zone": "Entry/Circulation"},
     "2BA554": {"name": "Washing-Dyeing Range",                  "zone": "Production"},
     "2BA298": {"name": "Jigger",                                "zone": "Production"},
     "2BA638": {"name": "Jets — B/H Office",                     "zone": "Production"},
-    "2BA640": {"name": "Long Jets — B/H Office",                "zone": "Production"},  # renamed
+    "2BA640": {"name": "Long Jets — B/H Office",                "zone": "Production"},
     "2BA578": {"name": "First Printing",                        "zone": "Production"},
     "2BA680": {"name": "Cabin & Stenter",                       "zone": "Production"},
     "2BA64C": {"name": "Stenter and Jet — Heighted",            "zone": "Production"},
     "2BA4CC": {"name": "Loop and Folding",                      "zone": "Post-Process"},
     "2BA558": {"name": "Transition/Circulation Area",           "zone": "Circulation"},
     "2BA478": {"name": "Second Folding — near Digital Print",   "zone": "Post-Process"},
-    "2BA544": {"name": "Printing — Circulation",               "zone": "Circulation"},
+    "2BA544": {"name": "Printing — Circulation",                "zone": "Circulation"},
     "2BA534": {"name": "Transition/Circulation Area (2)",       "zone": "Circulation"},
     "2BA650": {"name": "Printing Table",                        "zone": "Production"},
 }
@@ -376,7 +221,6 @@ def f_to_c(f: float) -> float:
     return (f - 32) * 5 / 9
 
 def heat_index_fahrenheit(T_f: float, RH: float) -> float:
-    """Full NWS Rothfusz regression with low-RH and high-RH adjustments."""
     hi_simple = 0.5 * (T_f + 61.0 + (T_f - 68.0) * 1.2 + RH * 0.094)
     if (hi_simple + T_f) / 2 < 80:
         return hi_simple
@@ -407,30 +251,12 @@ def heat_index_category(hi_f: float):
     else:
         return "Extreme Danger",  "extreme"
 
-# ── Change 1: NWS-aligned colour palette (Yellow → Orange → Red) ─────────────
-# Matches image exactly: yellow=Caution, orange=Extreme Caution/Danger, red=Extreme Danger
-HI_COLORSCALE = [
-    [0.00, "#ffffff"],   # Normal  (white/green region — below caution)
-    [0.20, "#ffff00"],   # Caution (bright yellow)
-    [0.45, "#ffa500"],   # Extreme Caution (orange)
-    [0.70, "#ff6600"],   # Danger (deep orange)
-    [1.00, "#ff0000"],   # Extreme Danger (red)
-]
-
-# Category colours matching the legend image
 CAT_COLORS = {
     "Normal":          "#ffffff",
     "Caution":         "#ffff00",
     "Extreme Caution": "#ffa500",
     "Danger":          "#ff6600",
     "Extreme Danger":  "#ff0000",
-}
-CAT_TEXT_COLORS = {
-    "Normal":          "#000000",
-    "Caution":         "#000000",
-    "Extreme Caution": "#000000",
-    "Danger":          "#000000",
-    "Extreme Danger":  "#000000",
 }
 
 def compute_heat_index(df: pd.DataFrame) -> pd.DataFrame:
@@ -502,7 +328,7 @@ with st.sidebar:
     """, unsafe_allow_html=True)
     st.markdown("---")
 
-    auto_refresh = st.toggle("⟳ Auto-refresh (5 min)", value=False)
+    auto_refresh = st.toggle("Auto-refresh (5 min)", value=False)
 
     st.markdown("<div style='font-size:12px;font-weight:700;color:#000000;text-transform:uppercase;"
                 "letter-spacing:1px;margin:8px 0 4px 0;'>Time Window</div>", unsafe_allow_html=True)
@@ -526,7 +352,7 @@ with st.sidebar:
     min_date = today - timedelta(days=365)
 
     date_range = st.date_input(
-        "From → To",
+        "From / To",
         value=(today - timedelta(days=1), today),
         min_value=min_date, max_value=today,
         key="dr", label_visibility="hidden",
@@ -547,19 +373,21 @@ with st.sidebar:
             st.error("'From' date must be before 'To' date.")
 
     if st.session_state.use_custom_dates:
-        st.markdown(f"<div style='font-size:11px;color:#1d4ed8;font-weight:600;"
-                    f"background:#eff6ff;border:1px solid #93c5fd;border-radius:6px;"
-                    f"padding:5px 8px;margin-top:6px;'>"
-                    f"📅 {date_from.strftime('%d %b')} → {date_to.strftime('%d %b %Y')}"
-                    f"</div>", unsafe_allow_html=True)
+        st.markdown(
+            f"<div style='font-size:11px;color:#1d4ed8;font-weight:600;"
+            f"background:#eff6ff;border:1px solid #93c5fd;border-radius:6px;"
+            f"padding:5px 8px;margin-top:6px;'>"
+            f"From {date_from.strftime('%d %b')} to {date_to.strftime('%d %b %Y')}"
+            f"</div>", unsafe_allow_html=True)
     else:
         label_map = {6:"Last 6 hours", 24:"Last 24 hours", 48:"Last 48 hours", 168:"Last 7 days"}
         lbl = label_map.get(st.session_state.selected_hours,
                              f"Last {st.session_state.selected_hours}h")
-        st.markdown(f"<div style='font-size:11px;color:#1d4ed8;font-weight:600;"
-                    f"background:#eff6ff;border:1px solid #93c5fd;border-radius:6px;"
-                    f"padding:5px 8px;margin-top:6px;'>🕐 {lbl}</div>",
-                    unsafe_allow_html=True)
+        st.markdown(
+            f"<div style='font-size:11px;color:#1d4ed8;font-weight:600;"
+            f"background:#eff6ff;border:1px solid #93c5fd;border-radius:6px;"
+            f"padding:5px 8px;margin-top:6px;'>{lbl}</div>",
+            unsafe_allow_html=True)
 
     selected_hours = st.session_state.selected_hours
 
@@ -572,18 +400,17 @@ with st.sidebar:
             selected_devices[did] = info
 
     st.markdown("---")
-    st.markdown("""
-    <div style='font-size:10px; color:#000000; font-family:Calibri,Segoe UI,Arial,sans-serif;'>
-    <strong>DATA SOURCE</strong><br>
-    <a href='https://opendata.oizom.com' style='color:#c2410c'>opendata.oizom.com</a><br><br>
-    <strong>REFERENCE</strong><br>
-    NWS Heat Index Chart<br>
-    Rothfusz Regression<br><br>
-    <strong>UNITS</strong><br>
-    Temperature &#8594; &deg;C<br>
-    Heat Index &#8594; &deg;C (NWS)
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        "<div style='font-size:10px;color:#000000;"
+        "font-family:Calibri,Segoe UI,Arial,sans-serif;'>"
+        "<strong>DATA SOURCE</strong><br>"
+        "<a href='https://opendata.oizom.com' style='color:#c2410c'>opendata.oizom.com</a><br><br>"
+        "<strong>REFERENCE</strong><br>"
+        "NWS Heat Index Chart<br>Rothfusz Regression<br><br>"
+        "<strong>UNITS</strong><br>"
+        "Temperature: degrees C<br>Heat Index: degrees C (NWS)"
+        "</div>",
+        unsafe_allow_html=True)
 
 
 # ── Data loading ──────────────────────────────────────────────────────────────
@@ -607,7 +434,7 @@ if auto_refresh:
 
 device_ids = list(selected_devices.keys())
 
-with st.spinner("Fetching sensor data from Oizom…"):
+with st.spinner("Fetching sensor data from Oizom..."):
     data_store = load_all_data(device_ids, selected_hours)
 
 if not data_store:
@@ -616,21 +443,21 @@ if not data_store:
 
 
 # ── Header ────────────────────────────────────────────────────────────────────
-st.markdown("""
-<div style='padding:14px 22px 20px 22px; background:#bfdbfe; border-radius:12px;
-            margin-bottom:16px; border:1px solid #93c5fd;'>
-  <div style='font-size:12px; color:#c2410c; letter-spacing:2px;
-              text-transform:uppercase; margin-bottom:6px; font-weight:700;'>
-    Indoor Occupational Heat Stress
-  </div>
-  <h1 style='margin:0; font-weight:700; font-size:26px; color:#000000;'>
-    Unit 1 — Live Sensor Dashboard
-  </h1>
-  <p style='margin:6px 0 0 0; color:#000000; font-size:13px; font-weight:500;'>
-    Surat · Heat Index Analysis
-  </p>
-</div>
-""", unsafe_allow_html=True)
+st.markdown(
+    "<div style='padding:14px 22px 20px 22px; background:#bfdbfe; border-radius:12px;"
+    "margin-bottom:16px; border:1px solid #93c5fd;'>"
+    "<div style='font-size:12px; color:#c2410c; letter-spacing:2px;"
+    "text-transform:uppercase; margin-bottom:6px; font-weight:700;'>"
+    "Indoor Occupational Heat Stress"
+    "</div>"
+    "<h1 style='margin:0; font-weight:700; font-size:26px; color:#000000;'>"
+    "Unit 1 - Live Sensor Dashboard"
+    "</h1>"
+    "<p style='margin:6px 0 0 0; color:#000000; font-size:13px; font-weight:500;'>"
+    "Surat - Heat Index Analysis"
+    "</p>"
+    "</div>",
+    unsafe_allow_html=True)
 
 tab_overview, tab_heatmap, tab_trends, tab_hi, tab_devices, tab_about = st.tabs([
     "Overview", "Heat Map", "Trends", "Heat Index", "Devices", "About"
@@ -654,10 +481,10 @@ def summary_table() -> pd.DataFrame:
             "Device ID":    did,
             "Location":     info["name"],
             "Zone":         info["zone"],
-            "Temp (°C)":    round(row.get("Temperature", np.nan), 1),
+            "Temp (C)":     round(row.get("Temperature", np.nan), 1),
             "Humidity (%)": round(row.get("Humidity",    np.nan), 1),
-            "HI (°C)":      round(f_to_c(hi_f), 1) if not np.isnan(hi_f) else np.nan,
-            "Risk":         row.get("HI_Cat", "—"),
+            "HI (C)":       round(f_to_c(hi_f), 1) if not np.isnan(hi_f) else np.nan,
+            "Risk":         row.get("HI_Cat", "-"),
         })
     return pd.DataFrame(rows)
 
@@ -675,21 +502,22 @@ def _apply_theme(fig, height=400, margin=None, legend=None, showlegend=False):
     if legend is not None:
         fig.update_layout(legend=legend)
 
-def _style_axes(fig, xtitle="", ytitle="", xrange=None):
+def _style_axes(fig, xtitle="", ytitle=""):
     xkw = dict(gridcolor=_GRID, linecolor="#93c5fd", color="#000000",
                tickfont=_TF, automargin=True)
-    if xtitle: xkw["title_text"] = xtitle; xkw["title_font"] = dict(color="#000000", family=_FONT)
-    if xrange: xkw["range"] = xrange
+    if xtitle:
+        xkw["title_text"] = xtitle
+        xkw["title_font"] = dict(color="#000000", family=_FONT)
     fig.update_xaxes(**xkw)
     ykw = dict(gridcolor=_GRID, linecolor="#93c5fd", color="#000000",
                tickfont=_TF, automargin=True)
-    if ytitle: ykw["title_text"] = ytitle; ykw["title_font"] = dict(color="#000000", family=_FONT)
+    if ytitle:
+        ykw["title_text"] = ytitle
+        ykw["title_font"] = dict(color="#000000", family=_FONT)
     fig.update_yaxes(**ykw)
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# TAB 1: OVERVIEW
-# ─────────────────────────────────────────────────────────────────────────────
+# ── TAB 1: OVERVIEW ───────────────────────────────────────────────────────────
 with tab_overview:
     all_latest = [get_latest(d) for d in selected_devices if get_latest(d)]
     if all_latest:
@@ -704,38 +532,39 @@ with tab_overview:
         kpi1, kpi2, kpi3, kpi4 = st.columns(4)
         with kpi1:
             lv = "danger" if avg_temp > 35 else "caution" if avg_temp > 30 else "safe"
-            st.markdown(f"""
-            <div class='metric-card'>
-              <div class='label'>Avg. Temperature</div>
-              <div class='value v-{lv}'>{avg_temp:.1f}°C</div>
-              <div class='sub'>{len(all_latest)} active sensors</div>
-            </div>""", unsafe_allow_html=True)
+            st.markdown(
+                "<div class='metric-card'>"
+                "<div class='label'>Avg. Temperature</div>"
+                f"<div class='value v-{lv}'>{avg_temp:.1f} C</div>"
+                f"<div class='sub'>{len(all_latest)} active sensors</div>"
+                "</div>", unsafe_allow_html=True)
         with kpi2:
-            st.markdown(f"""
-            <div class='metric-card'>
-              <div class='label'>Avg. Relative Humidity</div>
-              <div class='value v-caution'>{avg_hum:.1f}%</div>
-              <div class='sub'>Indoor RH — all active sensors</div>
-            </div>""", unsafe_allow_html=True)
+            st.markdown(
+                "<div class='metric-card'>"
+                "<div class='label'>Avg. Relative Humidity</div>"
+                f"<div class='value v-caution'>{avg_hum:.1f}%</div>"
+                "<div class='sub'>Indoor RH - all active sensors</div>"
+                "</div>", unsafe_allow_html=True)
         with kpi3:
             _, avg_lv = heat_index_category(avg_hi_f)
-            st.markdown(f"""
-            <div class='metric-card'>
-              <div class='label'>Avg. Heat Index</div>
-              <div class='value v-{avg_lv}'>{f_to_c(avg_hi_f):.1f}°C</div>
-              <div class='sub'>Apparent temperature (Heat Index)</div>
-            </div>""", unsafe_allow_html=True)
+            st.markdown(
+                "<div class='metric-card'>"
+                "<div class='label'>Avg. Heat Index</div>"
+                f"<div class='value v-{avg_lv}'>{f_to_c(avg_hi_f):.1f} C</div>"
+                "<div class='sub'>Apparent temperature (Heat Index)</div>"
+                "</div>", unsafe_allow_html=True)
         with kpi4:
-            st.markdown(f"""
-            <div class='metric-card'>
-              <div class='label'>Peak Heat Index</div>
-              <div class='value v-{max_level}'>{f_to_c(max_hi_f):.1f}°C</div>
-              <div class='sub'>{selected_devices[max_loc]["name"]} &nbsp;
-                <span class='badge badge-{max_level}'>{max_cat}</span></div>
-            </div>""", unsafe_allow_html=True)
+            loc_name = selected_devices[max_loc]["name"]
+            st.markdown(
+                "<div class='metric-card'>"
+                "<div class='label'>Peak Heat Index</div>"
+                f"<div class='value v-{max_level}'>{f_to_c(max_hi_f):.1f} C</div>"
+                f"<div class='sub'>{loc_name} &nbsp;"
+                f"<span class='badge badge-{max_level}'>{max_cat}</span></div>"
+                "</div>", unsafe_allow_html=True)
         st.markdown("")
 
-    st.markdown("<div class='section-header'>All Sensor Readings — Current</div>",
+    st.markdown("<div class='section-header'>All Sensor Readings - Current</div>",
                 unsafe_allow_html=True)
     df_sum = summary_table()
     if not df_sum.empty:
@@ -754,7 +583,7 @@ with tab_overview:
             styled = df_sum.style.applymap(style_risk, subset=["Risk"])
         st.dataframe(styled, use_container_width=True, hide_index=True)
 
-    st.markdown("<div class='section-header'>⚠ Active Alerts</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'>Active Alerts</div>", unsafe_allow_html=True)
     alert_count = 0
     for did, info in selected_devices.items():
         row = get_latest(did)
@@ -763,20 +592,19 @@ with tab_overview:
         hi_f = row.get("HI_F", 0)
         if hi_f >= 91:
             cat, level = heat_index_category(hi_f)
-            st.markdown(f"""
-            <div class='alert-box'>
-              <strong>{info['name']}</strong> ({did}) — Heat Index <strong>{f_to_c(hi_f):.1f}°C</strong>
-              &nbsp;<span class='badge badge-{level}'>{cat}</span>
-              &nbsp;· Temp {row['Temperature']:.1f}°C · RH {row['Humidity']:.1f}%
-            </div>""", unsafe_allow_html=True)
+            st.markdown(
+                "<div class='alert-box'>"
+                f"<strong>{info['name']}</strong> ({did}) - Heat Index "
+                f"<strong>{f_to_c(hi_f):.1f} C</strong>"
+                f" <span class='badge badge-{level}'>{cat}</span>"
+                f" - Temp {row['Temperature']:.1f} C - RH {row['Humidity']:.1f}%"
+                "</div>", unsafe_allow_html=True)
             alert_count += 1
     if alert_count == 0:
-        st.success("✓ No devices currently exceeding Caution threshold (33°C Heat Index)")
+        st.success("No devices currently exceeding Caution threshold (33 C Heat Index)")
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# TAB 2: HEAT MAP
-# ─────────────────────────────────────────────────────────────────────────────
+# ── TAB 2: HEAT MAP ───────────────────────────────────────────────────────────
 with tab_heatmap:
     st.markdown("<div class='section-header'>Spatial Heat Index Distribution</div>",
                 unsafe_allow_html=True)
@@ -794,38 +622,35 @@ with tab_heatmap:
     if hi_vals:
         hi_c_vals  = [f_to_c(v) for v in hi_vals]
         bar_colors = [CAT_COLORS.get(c, "#cccccc") for c in cats]
-        txt_colors = [CAT_TEXT_COLORS.get(c, "#000000") for c in cats]
 
         fig = go.Figure()
         for i in range(len(names)):
-            # Place label inside bar if tall enough, otherwise just above
             val = hi_c_vals[i]
             txt_pos = "inside" if val > f_to_c(86) else "outside"
-            txt_color = "#000000" if txt_pos == "outside" else "#000000"
             fig.add_trace(go.Bar(
                 x=[names[i]], y=[val],
                 marker_color=bar_colors[i],
                 marker_line_color="#888888",
                 marker_line_width=0.8,
-                # ── Only °C value, no category text ──
-                text=f"{val:.1f}°C",
+                text=f"{val:.1f} C",
                 textposition=txt_pos,
-                textfont=dict(color=txt_color, size=11, family=_FONT),
-                hovertemplate=f"<b>{names[i]}</b><br>Heat Index: {val:.1f}°C"
-                              f"<br>Category: {cats[i]}<extra></extra>",
+                textfont=dict(color="#000000", size=11, family=_FONT),
+                hovertemplate=(
+                    f"<b>{names[i]}</b><br>"
+                    f"Heat Index: {val:.1f} C<br>"
+                    f"Category: {cats[i]}<extra></extra>"
+                ),
                 name=cats[i], showlegend=False,
             ))
 
-        # NWS threshold lines — annotation on LEFT to avoid clashing with legend
         threshold_lines = [
-            (f_to_c(80),  "Caution (27°C)",         "#ca8a04"),
-            (f_to_c(91),  "Extreme Caution (33°C)", "#ea580c"),
-            (f_to_c(103), "Danger (39°C)",           "#dc2626"),
-            (f_to_c(125), "Extreme Danger (52°C)",   "#991b1b"),
+            (f_to_c(80),  "Caution (27 C)",          "#ca8a04"),
+            (f_to_c(91),  "Extreme Caution (33 C)",  "#ea580c"),
+            (f_to_c(103), "Danger (39 C)",            "#dc2626"),
+            (f_to_c(125), "Extreme Danger (52 C)",    "#991b1b"),
         ]
         for y_c, lbl, color in threshold_lines:
-            fig.add_hline(y=y_c, line_dash="dot", line_color=color,
-                          line_width=1.5,
+            fig.add_hline(y=y_c, line_dash="dot", line_color=color, line_width=1.5,
                           annotation_text=lbl,
                           annotation_font_color=color,
                           annotation_font_size=10,
@@ -834,19 +659,16 @@ with tab_heatmap:
                           annotation_bgcolor="rgba(255,255,255,0.7)",
                           annotation_borderpad=3)
 
-        # ── Change 1: Legend patch matching image colours ──
-        for cat_name, bg, txt in [
-            ("Caution",         "#ffff00", "#000000"),
-            ("Extreme Caution", "#ffa500", "#000000"),
-            ("Danger",          "#ff6600", "#000000"),
-            ("Extreme Danger",  "#ff0000", "#000000"),
+        for cat_name, bg in [
+            ("Caution",         "#ffff00"),
+            ("Extreme Caution", "#ffa500"),
+            ("Danger",          "#ff6600"),
+            ("Extreme Danger",  "#ff0000"),
         ]:
             fig.add_trace(go.Bar(
-                x=[None], y=[None],
-                name=cat_name,
+                x=[None], y=[None], name=cat_name,
                 marker_color=bg,
-                marker_line_color="#888888",
-                marker_line_width=0.8,
+                marker_line_color="#888888", marker_line_width=0.8,
                 showlegend=True,
             ))
 
@@ -856,15 +678,15 @@ with tab_heatmap:
                          bgcolor="#eff6ff", bordercolor="#93c5fd",
                          font=dict(color="#000000", size=11, family=_FONT),
                          x=1.01, y=1, xanchor="left",
-                         title=dict(text="Risk Level", font=dict(color="#000000", family=_FONT)),
+                         title=dict(text="Risk Level",
+                                    font=dict(color="#000000", family=_FONT)),
                      ))
-        _style_axes(fig, ytitle="Heat Index (°C)")
+        _style_axes(fig, ytitle="Heat Index (C)")
         fig.update_xaxes(tickangle=-40, tickfont=dict(size=10, family=_FONT, color="#000000"))
         fig.update_yaxes(rangemode="tozero")
         st.plotly_chart(fig, use_container_width=True)
 
-    # ── Change 3: Grouped bar chart of Temp & Humidity per device ─────────────
-    st.markdown("<div class='section-header'>Temperature & Humidity — All Devices</div>",
+    st.markdown("<div class='section-header'>Temperature and Humidity - All Devices</div>",
                 unsafe_allow_html=True)
 
     bar_names, bar_temps, bar_hums = [], [], []
@@ -879,14 +701,14 @@ with tab_heatmap:
     if bar_names:
         fig_bar = go.Figure()
         fig_bar.add_trace(go.Bar(
-            name="Temperature (°C)",
+            name="Temperature (C)",
             x=bar_names, y=bar_temps,
             marker_color="#ea580c",
             marker_line_color="#c2410c", marker_line_width=0.8,
-            text=[f"{v:.1f}°C" for v in bar_temps],
+            text=[f"{v:.1f} C" for v in bar_temps],
             textposition="outside",
             textfont=dict(color="#000000", size=10, family=_FONT),
-            hovertemplate="<b>%{x}</b><br>Temperature: %{y:.1f}°C<extra></extra>",
+            hovertemplate="<b>%{x}</b><br>Temperature: %{y:.1f} C<extra></extra>",
         ))
         fig_bar.add_trace(go.Bar(
             name="Relative Humidity (%)",
@@ -911,26 +733,24 @@ with tab_heatmap:
         st.plotly_chart(fig_bar, use_container_width=True)
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# TAB 3: TRENDS
-# ─────────────────────────────────────────────────────────────────────────────
+# ── TAB 3: TRENDS ─────────────────────────────────────────────────────────────
 with tab_trends:
-    st.markdown("<div class='section-header'>Temperature & Humidity Time Series</div>",
+    st.markdown("<div class='section-header'>Temperature and Humidity Time Series</div>",
                 unsafe_allow_html=True)
 
     device_choice = st.selectbox(
         "Select sensor",
         options=list(selected_devices.keys()),
-        format_func=lambda d: f"{d} — {selected_devices[d]['name']}",
+        format_func=lambda d: f"{d} - {selected_devices[d]['name']}",
         key="trend_device",
     )
     df_t = data_store.get(device_choice)
     if df_t is not None and not df_t.empty:
         fig3 = make_subplots(rows=3, cols=1, shared_xaxes=True,
                              vertical_spacing=0.06,
-                             subplot_titles=("Temperature (°C)",
+                             subplot_titles=("Temperature (C)",
                                              "Relative Humidity (%)",
-                                             "Heat Index (°C)"))
+                                             "Heat Index (C)"))
         fig3.add_trace(go.Scatter(x=df_t["Time"], y=df_t["Temperature"],
                                   mode="lines", name="Temp",
                                   line=dict(color="#ea580c", width=2)), row=1, col=1)
@@ -955,14 +775,14 @@ with tab_trends:
         st.plotly_chart(fig3, use_container_width=True)
 
         c1, c2, c3, c4, c5 = st.columns(5)
-        c1.metric("Min Temp", f"{df_t['Temperature'].min():.1f}°C")
-        c2.metric("Max Temp", f"{df_t['Temperature'].max():.1f}°C")
-        c3.metric("Avg Temp", f"{df_t['Temperature'].mean():.1f}°C")
-        c4.metric("Max HI",   f"{df_t['HI_C'].max():.1f}°C")
-        c5.metric("Avg HI",   f"{df_t['HI_C'].mean():.1f}°C")
+        c1.metric("Min Temp", f"{df_t['Temperature'].min():.1f} C")
+        c2.metric("Max Temp", f"{df_t['Temperature'].max():.1f} C")
+        c3.metric("Avg Temp", f"{df_t['Temperature'].mean():.1f} C")
+        c4.metric("Max HI",   f"{df_t['HI_C'].max():.1f} C")
+        c5.metric("Avg HI",   f"{df_t['HI_C'].mean():.1f} C")
 
     st.markdown("---")
-    st.markdown("<div class='section-header'>Multi-Device Comparison — Heat Index Over Time</div>",
+    st.markdown("<div class='section-header'>Multi-Device Comparison - Heat Index Over Time</div>",
                 unsafe_allow_html=True)
     fig4 = go.Figure()
     palette = px.colors.qualitative.Dark24
@@ -979,41 +799,26 @@ with tab_trends:
                  showlegend=True,
                  legend=dict(bgcolor="#eff6ff", bordercolor="#93c5fd",
                              font=dict(color="#000000", size=11, family=_FONT)))
-    _style_axes(fig4, ytitle="Heat Index (°C)")
+    _style_axes(fig4, ytitle="Heat Index (C)")
     st.plotly_chart(fig4, use_container_width=True)
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# TAB 4: HEAT INDEX REFERENCE
-# ─────────────────────────────────────────────────────────────────────────────
+# ── TAB 4: HEAT INDEX REFERENCE ───────────────────────────────────────────────
 with tab_hi:
     st.markdown("<div class='section-header'>NWS Heat Index Reference Chart</div>",
                 unsafe_allow_html=True)
 
-    # ── Change 1 & 2: Colours match image + value labels inside cells ─────────
     rh_range     = list(range(40, 105, 5))
     temp_f_range = list(range(80, 112, 2))
     temp_c_range = [round(f_to_c(t), 1) for t in temp_f_range]
     z_matrix     = [[round(f_to_c(heat_index_fahrenheit(float(T), float(RH))), 1)
                      for RH in rh_range] for T in temp_f_range]
 
-    # Build colour matrix matching image exactly
-    def hi_cell_color(hi_c):
-        hi_f = hi_c * 9/5 + 32
-        if hi_f < 80:   return "#ffffff"   # white / no stress
-        elif hi_f < 91: return "#ffff00"   # yellow — Caution
-        elif hi_f < 103:return "#ffa500"   # orange — Extreme Caution
-        elif hi_f < 125:return "#ff0000"   # red    — Danger / Extreme Danger
-        else:           return "#cc0000"   # dark red
-
-    # Custom discrete colour per cell using annotation trick
     fig5 = go.Figure()
-
-    # Background heatmap with custom colourscale
     fig5.add_trace(go.Heatmap(
         z=z_matrix,
         x=[f"{r}%" for r in rh_range],
-        y=[f"{tc}°C" for tc in temp_c_range],
+        y=[f"{tc} C" for tc in temp_c_range],
         colorscale=[
             [0.00, "#ffffff"],
             [0.20, "#ffff00"],
@@ -1024,79 +829,68 @@ with tab_hi:
         zmin=f_to_c(70), zmax=f_to_c(130),
         showscale=True,
         colorbar=dict(
-            title=dict(text="HI (°C)",
-                       font=dict(family=_FONT, color="#000000")),
+            title=dict(text="HI (C)", font=dict(family=_FONT, color="#000000")),
             tickfont=dict(family=_FONT, color="#000000"),
             tickvals=[f_to_c(v) for v in [75, 80, 91, 103, 115, 125]],
-            ticktext=["<27°C<br>Normal",
-                      "27°C<br>Caution",
-                      "33°C<br>Ext. Caution",
-                      "39°C<br>Danger",
-                      "46°C",
-                      "52°C<br>Ext. Danger"],
+            ticktext=["<27C Normal", "27C Caution", "33C Ext.Caution",
+                      "39C Danger", "46C", "52C Ext.Danger"],
         ),
-        # ── Change 2: Show value labels in each cell ──
         text=[[str(v) for v in row] for row in z_matrix],
         texttemplate="%{text}",
         textfont=dict(size=9, family=_FONT, color="#000000"),
-        hovertemplate="Temp: %{y}<br>RH: %{x}<br>HI: %{z}°C<extra></extra>",
+        hovertemplate="Temp: %{y}<br>RH: %{x}<br>HI: %{z} C<extra></extra>",
     ))
 
     _apply_theme(fig5, height=580, margin=dict(l=20, r=120, t=30, b=40))
-    _style_axes(fig5, xtitle="Relative Humidity (%)", ytitle="Air Temperature (°C)")
+    _style_axes(fig5, xtitle="Relative Humidity (%)", ytitle="Air Temperature (C)")
     fig5.update_layout(plot_bgcolor="#ffffff", paper_bgcolor="#dbeafe")
     st.plotly_chart(fig5, use_container_width=True)
 
-    # Colour legend matching image exactly
-    st.markdown("""
-    <div style='display:flex; gap:24px; flex-wrap:wrap; padding:10px 0 16px 0; align-items:center;'>
-      <div style='display:flex;align-items:center;gap:6px;'>
-        <div style='width:28px;height:20px;background:#ffff00;border:1px solid #ca8a04;'></div>
-        <span style='font-size:12px;color:#000000;font-weight:600;'>Caution</span>
-      </div>
-      <div style='display:flex;align-items:center;gap:6px;'>
-        <div style='width:28px;height:20px;background:#ffa500;border:1px solid #ea580c;'></div>
-        <span style='font-size:12px;color:#000000;font-weight:600;'>Extreme Caution</span>
-      </div>
-      <div style='display:flex;align-items:center;gap:6px;'>
-        <div style='width:28px;height:20px;background:#ff6600;border:1px solid #dc2626;'></div>
-        <span style='font-size:12px;color:#000000;font-weight:600;'>Danger</span>
-      </div>
-      <div style='display:flex;align-items:center;gap:6px;'>
-        <div style='width:28px;height:20px;background:#ff0000;border:1px solid #991b1b;'></div>
-        <span style='font-size:12px;color:#000000;font-weight:600;'>Extreme Danger</span>
-      </div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        "<div style='display:flex;gap:24px;flex-wrap:wrap;padding:10px 0 16px 0;"
+        "align-items:center;'>"
+        "<div style='display:flex;align-items:center;gap:6px;'>"
+        "<div style='width:28px;height:20px;background:#ffff00;border:1px solid #ca8a04;'></div>"
+        "<span style='font-size:12px;color:#000000;font-weight:600;'>Caution</span></div>"
+        "<div style='display:flex;align-items:center;gap:6px;'>"
+        "<div style='width:28px;height:20px;background:#ffa500;border:1px solid #ea580c;'></div>"
+        "<span style='font-size:12px;color:#000000;font-weight:600;'>Extreme Caution</span></div>"
+        "<div style='display:flex;align-items:center;gap:6px;'>"
+        "<div style='width:28px;height:20px;background:#ff6600;border:1px solid #dc2626;'></div>"
+        "<span style='font-size:12px;color:#000000;font-weight:600;'>Danger</span></div>"
+        "<div style='display:flex;align-items:center;gap:6px;'>"
+        "<div style='width:28px;height:20px;background:#ff0000;border:1px solid #991b1b;'></div>"
+        "<span style='font-size:12px;color:#000000;font-weight:600;'>Extreme Danger</span></div>"
+        "</div>",
+        unsafe_allow_html=True)
 
     st.markdown("<div class='section-header'>Risk Levels</div>", unsafe_allow_html=True)
     col1, col2 = st.columns(2)
     categories = [
-        ("< 27°C",  "Normal",          "safe",    "No heat stress"),
-        ("27–32°C", "Caution",         "caution", "Fatigue possible with prolonged exposure"),
-        ("33–39°C", "Extreme Caution", "danger",  "Heat cramps / exhaustion possible"),
-        ("40–51°C", "Danger",          "extreme", "Heat cramps / exhaustion likely; stroke possible"),
-        ("≥ 52°C",  "Extreme Danger",  "extreme", "Heat stroke highly likely"),
+        ("< 27 C",  "Normal",          "safe",    "No heat stress"),
+        ("27-32 C", "Caution",         "caution", "Fatigue possible with prolonged exposure"),
+        ("33-39 C", "Extreme Caution", "danger",  "Heat cramps / exhaustion possible"),
+        ("40-51 C", "Danger",          "extreme", "Heat cramps / exhaustion likely; stroke possible"),
+        ("52+ C",   "Extreme Danger",  "extreme", "Heat stroke highly likely"),
     ]
     for i, (rng, name, level, desc) in enumerate(categories):
         target = col1 if i % 2 == 0 else col2
         with target:
-            st.markdown(f"""
-            <div class='metric-card' style='margin-bottom:8px'>
-              <span class='badge badge-{level}'>{name}</span>
-              <span style='margin-left:8px;font-size:12px;color:#000000;font-weight:600'>{rng}</span>
-              <div style='font-size:12px;color:#000000;margin-top:6px'>{desc}</div>
-            </div>""", unsafe_allow_html=True)
+            st.markdown(
+                "<div class='metric-card' style='margin-bottom:8px'>"
+                f"<span class='badge badge-{level}'>{name}</span>"
+                f"<span style='margin-left:8px;font-size:12px;color:#000000;"
+                f"font-weight:600'>{rng}</span>"
+                f"<div style='font-size:12px;color:#000000;margin-top:6px'>{desc}</div>"
+                "</div>", unsafe_allow_html=True)
 
-    st.info("💡 **Note:** Heat Index is computed in °F per the NWS Rothfusz regression "
-            "(with low-RH and high-RH adjustments), then converted to °C for display.")
+    st.info("Heat Index is computed in degrees F per the NWS Rothfusz regression "
+            "(with low-RH and high-RH adjustments), then converted to degrees C for display.")
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# TAB 5: DEVICES
-# ─────────────────────────────────────────────────────────────────────────────
+# ── TAB 5: DEVICES ────────────────────────────────────────────────────────────
 with tab_devices:
-    st.markdown("<div class='section-header'>Sensor Network — Unit 1</div>",
+    st.markdown("<div class='section-header'>Sensor Network - Unit 1</div>",
                 unsafe_allow_html=True)
 
     cols = st.columns(3)
@@ -1104,67 +898,64 @@ with tab_devices:
         row = get_latest(did)
         with cols[i % 3]:
             if row:
-                hi_f = row.get("HI_F", 0)
+                hi_f   = row.get("HI_F", 0)
                 cat, lev = heat_index_category(hi_f)
-                temp_c   = row.get("Temperature", 0)
-                hum      = row.get("Humidity", 0)
-                st.markdown(f"""
-                <div class='metric-card'>
-                  <div style='display:flex;justify-content:space-between;align-items:flex-start'>
-                    <div>
-                      <div class='label'>{did}</div>
-                      <div style='font-size:13px;font-weight:700;color:#000000;
-                                  margin:2px 0 4px 0'>{info['name']}</div>
-                      <span style='font-size:10px;color:#000000;font-weight:600;
-                                   background:#e9ecef;padding:2px 6px;
-                                   border-radius:3px'>{info['zone']}</span>
-                    </div>
-                    <span class='badge badge-{lev}'>{cat}</span>
-                  </div>
-                  <div style='display:grid;grid-template-columns:1fr 1fr 1fr;
-                              gap:8px;margin-top:12px;'>
-                    <div>
-                      <div class='label'>Temp</div>
-                      <div style='font-size:16px;color:#c2410c;font-weight:600'>{temp_c:.1f}°C</div>
-                    </div>
-                    <div>
-                      <div class='label'>RH</div>
-                      <div style='font-size:16px;color:#0369a1;font-weight:600'>{hum:.1f}%</div>
-                    </div>
-                    <div>
-                      <div class='label'>HI</div>
-                      <div style='font-size:16px;color:#b91c1c;font-weight:600'>{f_to_c(hi_f):.1f}°C</div>
-                    </div>
-                  </div>
-                </div>""", unsafe_allow_html=True)
+                temp_c = row.get("Temperature", 0)
+                hum    = row.get("Humidity", 0)
+                st.markdown(
+                    "<div class='metric-card'>"
+                    "<div style='display:flex;justify-content:space-between;"
+                    "align-items:flex-start'>"
+                    "<div>"
+                    f"<div class='label'>{did}</div>"
+                    f"<div style='font-size:13px;font-weight:700;color:#000000;"
+                    f"margin:2px 0 4px 0'>{info['name']}</div>"
+                    f"<span style='font-size:10px;color:#000000;font-weight:600;"
+                    f"background:#e9ecef;padding:2px 6px;"
+                    f"border-radius:3px'>{info['zone']}</span>"
+                    "</div>"
+                    f"<span class='badge badge-{lev}'>{cat}</span>"
+                    "</div>"
+                    "<div style='display:grid;grid-template-columns:1fr 1fr 1fr;"
+                    "gap:8px;margin-top:12px;'>"
+                    "<div><div class='label'>Temp</div>"
+                    f"<div style='font-size:16px;color:#c2410c;font-weight:600'>"
+                    f"{temp_c:.1f} C</div></div>"
+                    "<div><div class='label'>RH</div>"
+                    f"<div style='font-size:16px;color:#0369a1;font-weight:600'>"
+                    f"{hum:.1f}%</div></div>"
+                    "<div><div class='label'>HI</div>"
+                    f"<div style='font-size:16px;color:#b91c1c;font-weight:600'>"
+                    f"{f_to_c(hi_f):.1f} C</div></div>"
+                    "</div></div>",
+                    unsafe_allow_html=True)
             else:
-                st.markdown(f"""
-                <div class='metric-card' style='opacity:0.6'>
-                  <div class='label'>{did}</div>
-                  <div style='font-size:13px;color:#000000;font-weight:600'>{info['name']}</div>
-                  <div style='font-size:11px;color:#000000;margin-top:8px'>No data</div>
-                </div>""", unsafe_allow_html=True)
+                st.markdown(
+                    "<div class='metric-card' style='opacity:0.6'>"
+                    f"<div class='label'>{did}</div>"
+                    f"<div style='font-size:13px;color:#000000;font-weight:600'>"
+                    f"{info['name']}</div>"
+                    "<div style='font-size:11px;color:#000000;margin-top:8px'>No data</div>"
+                    "</div>", unsafe_allow_html=True)
 
     st.markdown("---")
     st.markdown("<div class='section-header'>Raw Data Export</div>", unsafe_allow_html=True)
     export_device = st.selectbox(
         "Device to export", list(selected_devices.keys()),
-        format_func=lambda d: f"{d} — {selected_devices[d]['name']}",
+        format_func=lambda d: f"{d} - {selected_devices[d]['name']}",
         key="export_sel",
     )
     df_exp = data_store.get(export_device)
     if df_exp is not None and not df_exp.empty:
         csv = df_exp.to_csv(index=False).encode("utf-8")
         st.download_button(
-            f"⬇ Download {export_device} CSV", data=csv,
+            f"Download {export_device} CSV", data=csv,
             file_name=f"heat_{export_device}_{datetime.now().strftime('%Y%m%d')}.csv",
             mime="text/csv",
         )
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# TAB 6: ABOUT
-# ─────────────────────────────────────────────────────────────────────────────
+# ── TAB 6: ABOUT ──────────────────────────────────────────────────────────────
 with tab_about:
     col1, col2 = st.columns([2, 1])
     with col1:
@@ -1172,7 +963,7 @@ with tab_about:
 ## Assessing Indoor Occupational Heat Stress
 ### A Case Study of Textile Processing MSMEs in Surat
 
-**WRI Working Paper** · *Draft in Progress*
+**WRI Working Paper** - *Draft in Progress*
 
 ---
 
@@ -1187,46 +978,48 @@ with tab_about:
 
 ### About This Dashboard
 
-This real-time dashboard displays environmental sensor data from **Unit 1**, one of four study units in the WRI occupational heat stress research.
+This real-time dashboard displays environmental sensor data from **Unit 1**, one of four study units
+in the WRI occupational heat stress research. Sensors are deployed across the facility capturing
+spatial and temporal variation in indoor heat conditions.
 
-Sensors are deployed across the facility — from stenter machines and jet dyeing areas to circulation zones and folding tables — capturing spatial and temporal variation in indoor heat conditions.
-
-**Heat Index** is computed using the **NWS Rothfusz regression** formula (with low-RH and high-RH adjustments), applied after converting sensor temperatures from °C to °F, then converted back to °C for display.
+**Heat Index** is computed using the NWS Rothfusz regression (with low-RH and high-RH adjustments),
+applied after converting sensor temperatures from degrees C to degrees F, then converted back to
+degrees C for display.
 
 ### Study Unit Typologies
 
-| # | Type | Description |
-|---|------|-------------|
-| 1 | High-ventilation, high-ceiling | Newly constructed, open space |
-| 2 | Traditional ground-floor shed | Dense cluster |
-| 3 | Multi-floor congested building | Old construction, restricted airflow |
-| 4 | Retrofitted mixed structure | Old-new with restricted airflow |
+| Type | Description |
+|------|-------------|
+| High-ventilation, high-ceiling | Newly constructed, open space |
+| Traditional ground-floor shed | Dense cluster |
+| Multi-floor congested building | Old construction, restricted airflow |
+| Retrofitted mixed structure | Old-new with restricted airflow |
 
 ---
 
 ### Authors
 
-Pooja Yadav · Mehul Patel · Abhijit Namboothiri · Ambar Singh · *WRI India*
+Pooja Yadav, Mehul Patel, Abhijit Namboothiri, Ambar Singh - *WRI India*
 
 ---
 
 ### Data Source
 
 Sensor data via [Oizom OpenData API](https://opendata.oizom.com/)
-Monitoring period: 12 months (continuous) · Interval: Hourly readings
+Monitoring period: 12 months (continuous) - Interval: Hourly readings
         """)
 
     with col2:
         st.markdown("""
-### Risk Reference (°C)
+### Risk Reference
 
 | Heat Index | Category |
 |------------|----------|
-| < 27°C     | Normal   |
-| 27–32°C    | Caution  |
-| 33–39°C    | Extreme Caution |
-| 40–51°C    | Danger   |
-| ≥ 52°C     | Extreme Danger |
+| < 27 C     | Normal   |
+| 27-32 C    | Caution  |
+| 33-39 C    | Extreme Caution |
+| 40-51 C    | Danger   |
+| 52+ C      | Extreme Danger |
 
 ---
 
@@ -1242,15 +1035,15 @@ Monitoring period: 12 months (continuous) · Interval: Hourly readings
 
 ### Contact
 
-WRI India · [wri.org/india](https://www.wri.org/india)
+WRI India - [wri.org/india](https://www.wri.org/india)
 
 Data: [opendata.oizom.com](https://opendata.oizom.com)
         """)
 
     st.markdown("---")
-    st.markdown("""
-    <div style='font-size:10px;color:#000000;text-align:center;font-weight:500'>
-    © World Resources Institute · Dashboard for research purposes only ·
-    Data: Oizom OpenData API · Heat Index: NWS Rothfusz Regression
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        "<div style='font-size:10px;color:#000000;text-align:center;font-weight:500'>"
+        "World Resources Institute - Dashboard for research purposes only - "
+        "Data: Oizom OpenData API - Heat Index: NWS Rothfusz Regression"
+        "</div>",
+        unsafe_allow_html=True)
