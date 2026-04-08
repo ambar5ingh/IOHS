@@ -115,7 +115,9 @@ p, span, div, li, label, h1, h2, h3, h4, h5, h6,
     color: #000000 !important;
     font-family: var(--font) !important;
 }
-
+/* Show sidebar toggle while hiding other header elements */
+header {visibility: hidden;}
+button[data-testid="stSidebarCollapseButton"] {visibility: visible !important;}
 [data-baseweb="select"], [data-baseweb="select"] > div {
     background-color: #ffffff !important;
     color: #000000 !important;
