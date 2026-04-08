@@ -265,7 +265,7 @@ components.html("""
         .addEventListener('click', window.parent.__toggleSidebar);
 })();
 </script>
-""", height=0, scrolling=False)
+""", height=50, scrolling=True)
 
 
 # ── Change 4: Renamed 2BA640 ──────────────────────────────────────────────────
