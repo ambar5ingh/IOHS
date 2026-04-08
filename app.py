@@ -192,7 +192,7 @@ hr { border-color: var(--border) !important; }
 </style>
 """, unsafe_allow_html=True)
 
-# ── Floating sidebar toggle button (replaces broken Streamlit default) ────────
+# ── Step 1: Inject the visible button via st.markdown (no script here) ────
 st.markdown("""
 <style>
 #sidebar-toggle-btn {
@@ -216,40 +216,56 @@ st.markdown("""
 #sidebar-toggle-btn svg { width: 20px; height: 20px; fill: #ffffff; }
 </style>
 
-<button id="sidebar-toggle-btn" title="Toggle sidebar" onclick="toggleSidebar()">
+<button id="sidebar-toggle-btn" title="Toggle sidebar"
+        onclick="window.__toggleSidebar && window.__toggleSidebar()">
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
     <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
   </svg>
 </button>
-
-<script>
-function toggleSidebar() {
-    // Try every known selector Streamlit uses across versions
-    const selectors = [
-        '[data-testid="collapsedControl"]',
-        '[data-testid="stSidebarCollapsedControl"]',
-        'button[aria-label="Close sidebar"]',
-        'button[aria-label="Collapse sidebar"]',
-        'button[aria-label="Expand sidebar"]',
-        'button[aria-label="Open sidebar"]',
-        'section[data-testid="stSidebar"] button',
-    ];
-    for (const sel of selectors) {
-        const el = document.querySelector(sel);
-        if (el) { el.click(); return; }
-    }
-    // Fallback: toggle sidebar width manually
-    const sidebar = document.querySelector('[data-testid="stSidebar"]');
-    if (sidebar) {
-        const isCollapsed = sidebar.getAttribute('aria-expanded') === 'True'
-                         || sidebar.style.width === '0px'
-                         || sidebar.classList.contains('st-emotion-cache-hidden');
-        sidebar.style.display = isCollapsed ? 'block' : 'none';
-    }
-}
-</script>
 """, unsafe_allow_html=True)
 
+# ── Step 2: Inject the JS via components.html (this CAN run scripts) ─────
+import streamlit.components.v1 as components
+components.html("""
+<script>
+(function() {
+    // Register the toggle function on the PARENT window
+    window.parent.__toggleSidebar = function() {
+        const doc = window.parent.document;
+
+        const selectors = [
+            '[data-testid="collapsedControl"]',
+            '[data-testid="stSidebarCollapsedControl"]',
+            'button[aria-label="Close sidebar"]',
+            'button[aria-label="Collapse sidebar"]',
+            'button[aria-label="Expand sidebar"]',
+            'button[aria-label="Open sidebar"]',
+        ];
+
+        for (const sel of selectors) {
+            const el = doc.querySelector(sel);
+            if (el) {
+                el.click();
+                return;
+            }
+        }
+
+        // Hard fallback — directly toggle sidebar visibility
+        const sidebar = doc.querySelector('[data-testid="stSidebar"]');
+        if (sidebar) {
+            const hidden = sidebar.style.display === 'none' ||
+                           getComputedStyle(sidebar).display === 'none';
+            sidebar.style.display = hidden ? '' : 'none';
+        }
+    };
+
+    // Also wire up the button click from this iframe side
+    // in case onclick on the parent button doesn't fire
+    window.parent.document.getElementById('sidebar-toggle-btn')
+        .addEventListener('click', window.parent.__toggleSidebar);
+})();
+</script>
+""", height=0, scrolling=False)
 
 
 # ── Change 4: Renamed 2BA640 ──────────────────────────────────────────────────
