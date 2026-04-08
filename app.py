@@ -47,6 +47,34 @@ html, body, [class*="css"], .stApp {
     font-family: var(--font) !important;
 }
 
+/* ── Sidebar collapse toggle — must stay visible when sidebar is open ── */
+[data-testid="stSidebarCollapseButton"] button,
+[data-testid="stSidebarCollapseButton"] button:hover {
+    background-color: #1d4ed8 !important;
+    border: 2px solid #1e40af !important;
+    border-radius: 50% !important;
+    color: #ffffff !important;
+}
+[data-testid="stSidebarCollapseButton"] button svg {
+    fill: #ffffff !important;
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+}
+
+/* ── Collapsed control (the button shown when sidebar is hidden) ── */
+[data-testid="collapsedControl"] button,
+[data-testid="collapsedControl"] button:hover {
+    background-color: #1d4ed8 !important;
+    border: 2px solid #1e40af !important;
+    border-radius: 50% !important;
+    color: #ffffff !important;
+}
+[data-testid="collapsedControl"] button svg {
+    fill: #ffffff !important;
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+}
+
 [data-testid="stSidebar"] .stButton > button {
     background-color: #eff6ff !important;
     color: #000000 !important;
