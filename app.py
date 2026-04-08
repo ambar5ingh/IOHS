@@ -241,7 +241,7 @@ function toggleSidebar() {
     // Fallback: toggle sidebar width manually
     const sidebar = document.querySelector('[data-testid="stSidebar"]');
     if (sidebar) {
-        const isCollapsed = sidebar.getAttribute('aria-expanded') === 'false'
+        const isCollapsed = sidebar.getAttribute('aria-expanded') === 'True'
                          || sidebar.style.width === '0px'
                          || sidebar.classList.contains('st-emotion-cache-hidden');
         sidebar.style.display = isCollapsed ? 'block' : 'none';
