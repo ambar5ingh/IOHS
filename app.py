@@ -193,10 +193,9 @@ hr { border-color: var(--border) !important; }
 """, unsafe_allow_html=True)
 
 # ── Floating sidebar toggle button (replaces broken Streamlit default) ────────
-import streamlit.components.v1 as components
-components.html("""
+st.markdown("""
 <style>
-  #sidebar-toggle-btn {
+#sidebar-toggle-btn {
     position: fixed;
     top: 14px;
     left: 14px;
@@ -211,23 +210,45 @@ components.html("""
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  #sidebar-toggle-btn svg { width: 20px; height: 20px; fill: #ffffff; }
+    transition: background 0.2s;
+}
+#sidebar-toggle-btn:hover { background-color: #1e40af; }
+#sidebar-toggle-btn svg { width: 20px; height: 20px; fill: #ffffff; }
 </style>
+
 <button id="sidebar-toggle-btn" title="Toggle sidebar" onclick="toggleSidebar()">
-  <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+  </svg>
 </button>
+
 <script>
 function toggleSidebar() {
-  const btns = window.parent.document.querySelectorAll(
-    '[data-testid="collapsedControl"], [data-testid="stSidebarCollapsedControl"], ' +
-    'button[aria-label="Close sidebar"], button[aria-label="Collapse sidebar"], ' +
-    'button[aria-label="Expand sidebar"], button[aria-label="Open sidebar"]'
-  );
-  if (btns.length > 0) btns[0].click();
+    // Try every known selector Streamlit uses across versions
+    const selectors = [
+        '[data-testid="collapsedControl"]',
+        '[data-testid="stSidebarCollapsedControl"]',
+        'button[aria-label="Close sidebar"]',
+        'button[aria-label="Collapse sidebar"]',
+        'button[aria-label="Expand sidebar"]',
+        'button[aria-label="Open sidebar"]',
+        'section[data-testid="stSidebar"] button',
+    ];
+    for (const sel of selectors) {
+        const el = document.querySelector(sel);
+        if (el) { el.click(); return; }
+    }
+    // Fallback: toggle sidebar width manually
+    const sidebar = document.querySelector('[data-testid="stSidebar"]');
+    if (sidebar) {
+        const isCollapsed = sidebar.getAttribute('aria-expanded') === 'false'
+                         || sidebar.style.width === '0px'
+                         || sidebar.classList.contains('st-emotion-cache-hidden');
+        sidebar.style.display = isCollapsed ? 'block' : 'none';
+    }
 }
 </script>
-""", height=50, scrolling=False)   # ← height=50, not 0
+""", unsafe_allow_html=True)
 
 
 
