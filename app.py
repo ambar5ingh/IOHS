@@ -192,7 +192,7 @@ hr { border-color: var(--border) !important; }
 </style>
 """, unsafe_allow_html=True)
 
-# ── Step 1: Inject the visible button via st.markdown (no script here) ────
+# ── Sidebar toggle button ─────────────────────────────────────────────────
 st.markdown("""
 <style>
 #sidebar-toggle-btn {
@@ -215,59 +215,137 @@ st.markdown("""
 #sidebar-toggle-btn:hover { background-color: #1e40af; }
 #sidebar-toggle-btn svg { width: 20px; height: 20px; fill: #ffffff; }
 </style>
-
-<button id="sidebar-toggle-btn" title="Toggle sidebar"
-        onclick="window.__toggleSidebar && window.__toggleSidebar()">
+<button id="sidebar-toggle-btn" title="Toggle sidebar">
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
     <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
   </svg>
 </button>
 """, unsafe_allow_html=True)
 
-# ── Step 2: Inject the JS via components.html (this CAN run scripts) ─────
 import streamlit.components.v1 as components
 components.html("""
 <script>
 (function() {
-    // Register the toggle function on the PARENT window
-    window.parent.__toggleSidebar = function() {
+    function forceSidebarOpen(doc) {
+        const sidebar = doc.querySelector('[data-testid="stSidebar"]');
+        if (!sidebar) return false;
+
+        // Remove any inline styles hiding it
+        sidebar.style.removeProperty('display');
+        sidebar.style.removeProperty('width');
+        sidebar.style.removeProperty('min-width');
+        sidebar.style.removeProperty('max-width');
+        sidebar.style.removeProperty('transform');
+        sidebar.style.removeProperty('opacity');
+        sidebar.style.removeProperty('visibility');
+
+        // Force open state via attribute
+        sidebar.setAttribute('aria-expanded', 'true');
+
+        // Find the inner section and force it visible
+        const inner = sidebar.querySelector('section');
+        if (inner) {
+            inner.style.removeProperty('transform');
+            inner.style.removeProperty('display');
+            inner.style.width = '';
+        }
+
+        // Inject a style override to keep it visible
+        let styleTag = doc.getElementById('__sidebar_force_style');
+        if (!styleTag) {
+            styleTag = doc.createElement('style');
+            styleTag.id = '__sidebar_force_style';
+            doc.head.appendChild(styleTag);
+        }
+        styleTag.textContent = `
+            [data-testid="stSidebar"] {
+                display: block !important;
+                transform: none !important;
+                min-width: 244px !important;
+                width: 244px !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                transition: none !important;
+            }
+            [data-testid="stSidebar"] > div:first-child {
+                transform: none !important;
+                width: 244px !important;
+            }
+            [data-testid="stSidebarContent"] {
+                display: block !important;
+                visibility: visible !important;
+            }
+        `;
+        return true;
+    }
+
+    function isSidebarVisible(doc) {
+        const sidebar = doc.querySelector('[data-testid="stSidebar"]');
+        if (!sidebar) return false;
+        const style = getComputedStyle(sidebar);
+        const transform = style.transform || style.webkitTransform;
+        // If translated off-screen or hidden
+        if (style.display === 'none') return false;
+        if (style.visibility === 'hidden') return false;
+        if (style.opacity === '0') return false;
+        if (transform && transform !== 'none' && transform.includes('matrix')) {
+            // Check if translated off screen (negative X translate)
+            const matrix = new DOMMatrixReadOnly(transform);
+            if (matrix.m41 < -100) return false;
+        }
+        return true;
+    }
+
+    function toggleSidebar() {
         const doc = window.parent.document;
 
-        const selectors = [
-            '[data-testid="collapsedControl"]',
-            '[data-testid="stSidebarCollapsedControl"]',
-            'button[aria-label="Close sidebar"]',
-            'button[aria-label="Collapse sidebar"]',
-            'button[aria-label="Expand sidebar"]',
-            'button[aria-label="Open sidebar"]',
-        ];
+        if (isSidebarVisible(doc)) {
+            // Hide it — remove the force style and click native button
+            const styleTag = doc.getElementById('__sidebar_force_style');
+            if (styleTag) styleTag.textContent = '';
 
-        for (const sel of selectors) {
-            const el = doc.querySelector(sel);
-            if (el) {
-                el.click();
-                return;
+            const collapseSelectors = [
+                'button[aria-label="Close sidebar"]',
+                'button[aria-label="Collapse sidebar"]',
+                '[data-testid="collapsedControl"]',
+                '[data-testid="stSidebarCollapsedControl"]',
+            ];
+            for (const sel of collapseSelectors) {
+                const btn = doc.querySelector(sel);
+                if (btn) { btn.click(); return; }
+            }
+        } else {
+            // Force open
+            forceSidebarOpen(doc);
+
+            // Also try native expand button
+            const expandSelectors = [
+                'button[aria-label="Expand sidebar"]',
+                'button[aria-label="Open sidebar"]',
+                '[data-testid="collapsedControl"]',
+                '[data-testid="stSidebarCollapsedControl"]',
+            ];
+            for (const sel of expandSelectors) {
+                const btn = doc.querySelector(sel);
+                if (btn) { btn.click(); break; }
             }
         }
+    }
 
-        // Hard fallback — directly toggle sidebar visibility
-        const sidebar = doc.querySelector('[data-testid="stSidebar"]');
-        if (sidebar) {
-            const hidden = sidebar.style.display === 'none' ||
-                           getComputedStyle(sidebar).display === 'none';
-            sidebar.style.display = hidden ? '' : 'none';
+    // Wait for DOM to be ready, then wire up button
+    function init() {
+        const btn = window.parent.document.getElementById('sidebar-toggle-btn');
+        if (btn) {
+            btn.addEventListener('click', toggleSidebar);
+        } else {
+            setTimeout(init, 200);
         }
-    };
+    }
 
-    // Also wire up the button click from this iframe side
-    // in case onclick on the parent button doesn't fire
-    window.parent.document.getElementById('sidebar-toggle-btn')
-        .addEventListener('click', window.parent.__toggleSidebar);
-})();
-</script>
-""", height=50, scrolling=True)
-
-
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        setTimeout(init, 100)
 # ── Change 4: Renamed 2BA640 ──────────────────────────────────────────────────
 DEVICES = {
     "2BA61C": {"name": "Ground Stenter",                        "zone": "Production"},
